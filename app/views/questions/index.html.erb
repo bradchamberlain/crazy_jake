@@ -1,0 +1,36 @@
+<h1>Questions <%=@survey.name%></h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Text</th>
+      <th>Index</th>
+      <th>Yes no</th>
+      <th>Rating</th>
+      <th>Free form</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= question.text %></td>
+        <td><%= question.index %></td>
+        <td><%= question.yes_no %></td>
+        <td><%= question.rating %></td>
+        <td><%= question.free_form %></td>
+        <td><%= link_to 'Show', customer_survey_question_path(@customer, @survey, question) %></td>
+        <td><%= link_to 'Edit', edit_customer_survey_question_path(@customer, @survey, question) %></td>
+        <td><%= link_to 'Destroy', customer_survey_question_path(@customer, @survey, question), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Question', new_customer_survey_question_path(@customer, @survey) %>
+| <%= link_to 'Back', customer_survey_path(@customer, @survey) %>

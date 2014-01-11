@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @question.text %>
+</p>
+
+<p>
+  <strong>Index:</strong>
+  <%= @question.index %>
+</p>
+
+<p>
+  <strong>Yes no:</strong>
+  <%= @question.yes_no %>
+</p>
+
+<p>
+  <strong>Rating:</strong>
+  <%= @question.rating %>
+</p>
+
+<p>
+  <strong>Free form:</strong>
+  <%= @question.free_form %>
+</p>
+
+<%= link_to 'Edit', edit_customer_survey_question_path(@customer, @survey, @question) %> |
+<%= link_to 'Back', customer_survey_questions_path(@customer, @survey) %>

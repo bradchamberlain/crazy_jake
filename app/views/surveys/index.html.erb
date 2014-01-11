@@ -1,0 +1,29 @@
+<h1>Listing surveys</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number of questions</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @surveys.each do |survey| %>
+      <tr>
+        <td><%= survey.name %></td>
+        <td><%= survey.questions.size %></td>
+        <td><%= link_to 'Show', customer_survey_path(@customer, survey) %></td>
+        <td><%= link_to 'Edit', edit_customer_survey_path(@customer,survey) %></td>
+        <td><%= link_to 'Destroy', customer_survey_path(@customer,survey), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Survey', new_customer_survey_path(@customer) %>

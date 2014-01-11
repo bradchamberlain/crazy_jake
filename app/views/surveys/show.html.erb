@@ -1,0 +1,26 @@
+<p id="notice"><%= notice %></p>
+
+<table>
+  <tr>
+    <th colspan="100%"><%=@survey.name%></th>
+  </tr>
+  <% @survey.questions.each do |question| %>
+  <tr>
+    <td><%=question.index%></td>
+    <td><%=question.text%></td>
+    <td>
+      <% if question.yes_no? %>Yes/No<% end %>
+      <% if question.rating? %>Rating<% end %>
+      <% if question.free_form? %>Free Form<% end %>
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+    <td colspan="100%"><image src="<%=qr_codes_url(survey_id: @survey.id, format: :jpeg)%>" width="100" /></td>
+    <td colspan="100%"><%= link_to "View", complete_surveys_path(survey_id: @survey.id) %></td>
+  </tr>
+</table>
+
+<%= link_to 'Edit', edit_customer_survey_path(@customer,@survey) %> |
+<%= link_to 'New Question', new_customer_survey_question_path(@customer, @survey) %> |
+<%= link_to 'Back', customer_surveys_path(@customer) %>

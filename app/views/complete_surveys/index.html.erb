@@ -1,0 +1,29 @@
+<form method="post" id="question_form" name="question_form">
+  <%= @question.text %>
+  <br />
+  <div id="question">
+  <% if @question.yes_no? %>
+      Yes<input type="radio" id="_response" name="_response" value="1">
+      No<input type="radio" id="_response" name="_response" value="0">
+  <% elsif @question.rating? %>
+    <div id="ratings">
+      Extremely Satisfied<input type="radio" id="_response" name="_response" value="5"><br />
+      Very Satisfied<input type="radio" id="_response" name="_response" value="4"><br />
+      Satisfied<input type="radio" id="_response" name="_response" value="3"><br />
+      Unsatisfied<input type="radio" id="_response" name="_response" value="2"><br />
+      Extremely Unsatisfied<input type="radio" id="_response" name="_response" value="1"><br />
+      Unknown<input type="radio" id="_response" name="_response" value="0">
+    </div>
+  <% elsif @question.free_form? %>
+      <textarea id="_response" name="_response">
+
+      </textarea>
+  <% end %>
+  </div>
+  <%= tag(:input, type: "hidden", name: "question_id", value: @question.id ) %>
+  <%= tag(:input, type: "hidden", name: "survey_id", value: @survey.id ) %>
+  <%= tag(:input, type: "hidden", name: "complete_survey_id", value: @complete_survey.id) %>
+  <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+  <br />
+  <input type="submit" value="Next ->" />
+</form>

@@ -1,0 +1,35 @@
+/.bundle
+/db/*.sqlite3
+/log/*.log
+/tmp
+/public/system
+/public/companies
+/public/upload
+
+doc/html
+
+# user and development files
+.rspec
+.rvmrc
+.powrc
+.DS_Store
+*.swp
+*.swo
+Guardfile
+.foreman
+.env
+
+# database configuration
+database.yml
+
+# SimpleCov reports
+coverage
+
+# mergetool backup files
+*.orig
+
+# IDEA files
+.idea/
+*.iml
+*.ipr
+*~
