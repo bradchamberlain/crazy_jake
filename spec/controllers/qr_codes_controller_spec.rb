@@ -30,11 +30,19 @@ describe QrCodesController do
   # QrCodesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  let(:survey) { FactoryGirl.create(:survey) }
+
   describe "GET index" do
     it "assigns all qr_codes as @qr_codes" do
       get :index, {}, valid_session
       response.should be_success
-     end
+    end
+
+    it "assigns all qr_codes as @qr_codes" do
+      get :index, {survey_id: survey.id, format: :svg}, valid_session
+      response.should be_success
+    end
+
   end
 
 end

@@ -24,6 +24,7 @@ describe CompleteSurveysController do
   # CompleteSurvey. As you add validations to CompleteSurvey, be sure to
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
+  let(:question) { FactoryGirl.build(:question) }
   let(:valid_attributes) { { "survey_id" => survey.id } }
 
   # This should return the minimal set of values that should be in the session
@@ -40,39 +41,67 @@ describe CompleteSurveysController do
 
   describe "POST create" do
     describe "with valid params" do
-      #it "creates a new CompleteSurvey" do
-      #  expect {
-      #    post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id}, valid_session
-      #  }.to change(CompleteSurvey, :count).by(1)
-      #end
+      it "creates a new CompleteSurvey" do
+        expect {
+          post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id}, valid_session
+        }.to change(CompleteSurvey, :count).by(1)
+      end
 
-      #it "assigns a newly created complete_survey as @complete_survey" do
-      #  post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id }, valid_session
-      #  assigns(:complete_survey).should be_a(CompleteSurvey)
-      #  assigns(:complete_survey).should be_persisted
-      #end
+      it "creates a new CompleteSurvey" do
+        question = FactoryGirl.build(:question)
+        question.survey = survey
+        question.save!
+        question2 = FactoryGirl.build(:question)
+        question2.survey = survey
+        question2.index = 2
+        question2.save!
+        expect {
+          post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id}, valid_session
+        }.to change(CompleteSurvey, :count).by(1)
+        question.destroy
+        question2.destroy
+      end
 
-      #it "redirects to the created complete_survey" do
-      #  post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id}, valid_session
-      #  response.should redirect_to(CompleteSurvey.last)
-      #end
+      it "does not create a new CompleteSurvey" do
+        question = FactoryGirl.build(:question)
+        question.survey = survey
+        question.save!
+        question2 = FactoryGirl.build(:question)
+        question2.survey = survey
+        question2.index = 2
+        question2.save!
+        complete_survey = CompleteSurvey.new
+        complete_survey.survey = survey
+        complete_survey.save!
+        expect {
+          post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id}, valid_session
+        }.to change(CompleteSurvey, :count).by(0)
+        question.destroy
+        question2.destroy
+        complete_survey.destroy
+      end
+
+      it "updates the responses for CompleteSurvey" do
+        question = FactoryGirl.build(:question)
+        question.survey = survey
+        question.save!
+        question2 = FactoryGirl.build(:question)
+        question2.survey = survey
+        question2.index = 2
+        question2.save!
+        complete_survey = CompleteSurvey.new
+        complete_survey.survey = survey
+        complete_survey.responses = ''
+        complete_survey.save!
+        post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id, "_response" => "s"}, valid_session
+        cs = CompleteSurvey.find(complete_survey.id)
+        cs.responses.should eq "[#{question.id}, \"s\"]"
+        question.destroy
+        question2.destroy
+        cs.destroy
+      end
     end
 
-    describe "with invalid params" do
-      #it "assigns a newly created but unsaved complete_survey as @complete_survey" do
-      #  # Trigger the behavior that occurs when invalid params are submitted
-      #  CompleteSurvey.any_instance.stub(:save).and_return(false)
-      #  post :create, {:complete_survey => { "survey_id" => "invalid value" },"survey_id" => survey.id}, valid_session
-      #  assigns(:complete_survey).should be_a_new(CompleteSurvey)
-      #end
-
-      #it "re-renders the 'new' template" do
-      #  # Trigger the behavior that occurs when invalid params are submitted
-      #  CompleteSurvey.any_instance.stub(:save).and_return(false)
-      #  post :create, {:complete_survey => { "survey_id" => "invalid value" }, "survey_id" => survey.id}, valid_session
-      #  response.should render_template("new")
-      #end
-    end
   end
 
 end

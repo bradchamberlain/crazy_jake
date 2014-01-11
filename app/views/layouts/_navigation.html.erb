@@ -1,5 +1,6 @@
 <%# navigation styled for Bootstrap 3.0 %>
 <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div style="color:white; margin-left: 10px;"><h4><%= @survey.customer.name if @survey %></h4></div>
   <div class="container">
     <div class="navbar-header" style="color:white">
       <%= render_breadcrumbs separator: ' / ', class: 'navbar-brand' %>

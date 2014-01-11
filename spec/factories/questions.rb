@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :question do
     text "MyText"
     index 1
-    yes_no false
+    yes_no true
     rating false
     free_form false
   end

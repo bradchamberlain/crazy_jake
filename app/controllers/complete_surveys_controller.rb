@@ -21,11 +21,6 @@ class CompleteSurveysController < ApplicationController
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def complete_survey_params
-      params.permit(:survey_id, :responses, :question_id, :complete_survey_id)
-    end
-
     def next_question
       if params[:question_id]
         question = Question.find(params[:question_id])
