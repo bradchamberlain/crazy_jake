@@ -95,7 +95,7 @@ describe CompleteSurveysController do
         complete_survey.save!
         post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id, "_response" => "s"}, valid_session
         cs = CompleteSurvey.find(complete_survey.id)
-        cs.responses.should eq "[#{question.id}, \"s\"]"
+        cs.responses["#{question.id}"].should eq "s"
         question.destroy
         question2.destroy
         cs.destroy
