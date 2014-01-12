@@ -1,1 +1,7 @@
-All Done
+<% if @survey.complete_message %>
+<pre>
+  <%= @survey.complete_message %>
+</pre>
+<% else %>
+    Have a nice day!
+<% end %>

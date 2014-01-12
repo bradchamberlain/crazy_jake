@@ -16,7 +16,7 @@ describe "surveys/new" do
 
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "form[action=?][method=?]", customer_surveys_path(@customer), "post" do
-      assert_select "textarea#survey_name[name=?]", "survey[name]"
+      assert_select "input#survey_name[name=?]", "survey[name]"
     end
   end
 end

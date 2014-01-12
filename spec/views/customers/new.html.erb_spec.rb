@@ -12,7 +12,7 @@ describe "customers/new" do
 
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "form[action=?][method=?]", customers_path, "post" do
-      assert_select "textarea#customer_name[name=?]", "customer[name]"
+      assert_select "input#customer_name[name=?]", "customer[name]"
     end
   end
 end
