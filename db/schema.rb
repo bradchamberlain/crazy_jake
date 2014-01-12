@@ -11,17 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110165338) do
+ActiveRecord::Schema.define(version: 20140112211543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "complete_surveys", force: true do |t|
     t.integer  "survey_id"
-    t.text     "responses"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "custom_values"
+    t.hstore   "responses"
+    t.hstore   "custom_values"
   end
 
   add_index "complete_surveys", ["survey_id"], name: "index_complete_surveys_on_survey_id", using: :btree

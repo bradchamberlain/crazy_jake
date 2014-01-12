@@ -3,16 +3,41 @@
   <br />
   <div id="question">
   <% if @question.yes_no? %>
-      Yes<input type="radio" id="_response" name="_response" value="1">
-      No<input type="radio" id="_response" name="_response" value="0">
+      <div class="field">
+          <input type="radio" id="_response1" name="_response" value="1" />
+          <label for="_response1">Yes</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response2" name="_response" value="0">
+        <label for="_response2">No</label>
+      </div>
+
   <% elsif @question.rating? %>
     <div id="ratings">
-      Extremely Satisfied<input type="radio" id="_response" name="_response" value="5"><br />
-      Very Satisfied<input type="radio" id="_response" name="_response" value="4"><br />
-      Satisfied<input type="radio" id="_response" name="_response" value="3"><br />
-      Unsatisfied<input type="radio" id="_response" name="_response" value="2"><br />
-      Extremely Unsatisfied<input type="radio" id="_response" name="_response" value="1"><br />
-      Unknown<input type="radio" id="_response" name="_response" value="0">
+      <div class="field">
+        <input type="radio" id="_response1" name="_response" value="5">
+        <label for="_response1">Extremely Satisfied</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response2" name="_response" value="4">
+        <label for="_response2">Very Satisfied</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response3" name="_response" value="3">
+        <label for="_response3">Satisfied</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response4" name="_response" value="2">
+        <label for="_response4">Unsatisfied</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response5" name="_response" value="1">
+        <label for="_response5">Extremely Unsatisfied</label>
+      </div>
+      <div class="field">
+        <input type="radio" id="_response6" name="_response" value="0">
+        <label for="_response6">Unknown</label>
+      </div>
     </div>
   <% elsif @question.free_form? %>
       <textarea id="_response" name="_response">

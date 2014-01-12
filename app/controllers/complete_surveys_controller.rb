@@ -42,9 +42,8 @@ class CompleteSurveysController < ApplicationController
       else
         @complete_survey = CompleteSurvey.new
         @complete_survey.survey = @survey
-        @complete_survey.responses = ""
-        @complete_survey.custom_values = params.select{|k| k.match /^c_/}.to_s if params.select{|k| k.match /^c_/}.present?
-        @complete_survey.save
+        @complete_survey.custom_values = params.select{|k| k.match /^c_/} if params.select{|k| k.match /^c_/}.present?
+        @complete_survey.save!
       end
     end
 
@@ -52,8 +51,9 @@ class CompleteSurveysController < ApplicationController
       if params[:_response]
         response = params[:_response].strip
         response = response.to_i if response.match /\d/
-        @complete_survey.responses = @complete_survey.responses + [params[:question_id].to_i,response].to_s
-        @complete_survey.save
+        @complete_survey.responses = Hash.new if @complete_survey.responses.nil?
+        @complete_survey.responses = { params[:question_id] =>  response }.merge(@complete_survey.responses)
+        @complete_survey.save!
       end
     end
 end
