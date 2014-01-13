@@ -13,6 +13,9 @@
       <% if question.rating? %>Rating<% end %>
       <% if question.free_form? %>Free Form<% end %>
     </td>
+    <td>
+    <td><%= link_to 'Destroy', customer_survey_question_path(@customer,survey,question), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </td>
   </tr>
   <% end %>
   <tr>

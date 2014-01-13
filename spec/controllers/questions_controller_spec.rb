@@ -25,6 +25,9 @@ describe QuestionsController do
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
   let(:valid_attributes) { { "text" => "MyText", "survey_id" => survey.id, index: 1, "yes_no" => true } }
+  let(:valid_attributes2) { { "text" => "MyText2", "survey_id" => survey.id, index: 2, "rating" => true } }
+  let(:valid_attributes3) { { "text" => "MyText3", "survey_id" => survey.id, index: 3, "free_form" => true } }
+
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -155,6 +158,17 @@ describe QuestionsController do
       question = Question.create! valid_attributes
       delete :destroy, {customer_id: survey.customer.id, survey_id: survey.id, :id => question.to_param}, valid_session
       response.should redirect_to(customer_survey_questions_path(survey.customer, survey))
+    end
+
+    it "updates the indexes of all the questions" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      question3 = Question.create! valid_attributes3
+      binding.pry
+      delete :destroy, {customer_id: survey.customer.id, survey_id: survey.id, :id => question2.to_param}, valid_session
+      survey.questions.size.shoule eq 2
+      question1.index.should eq 1
+      question3.index.should eq 2
     end
   end
 

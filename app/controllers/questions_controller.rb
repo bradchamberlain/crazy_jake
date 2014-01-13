@@ -59,7 +59,9 @@ class QuestionsController < ApplicationController
   # DELETE /questions/1
   # DELETE /questions/1.json
   def destroy
+    index = @question.index
     @question.destroy
+    update_indicies @question.index
     respond_to do |format|
       format.html { redirect_to customer_survey_questions_path(@customer, @survey) }
       format.json { head :no_content }
@@ -98,4 +100,14 @@ class QuestionsController < ApplicationController
     questions_bread_crumb
     add_breadcrumb @question.index, customer_survey_question_path(@customer, @survey, @question)
   end
+
+  def update_indicies index
+    @survey.questions.each do |question|
+      if question.index > index
+        question.index = question.index - 1
+        question.save!
+      end
+    end
+  end
+
 end
