@@ -81,9 +81,7 @@ class SurveysController < ApplicationController
     end
 
     def surveys_bread_crumb
-      add_breadcrumb 'Customers', customers_path
       add_breadcrumb @customer.name, customer_path(@customer)
-      add_breadcrumb 'Surveys', customer_surveys_path(@customer)
     end
 
     def survey_bread_crumb

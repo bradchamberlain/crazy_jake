@@ -25,6 +25,9 @@ describe QuestionsController do
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
   let(:valid_attributes) { { "text" => "MyText", "survey_id" => survey.id, index: 1, "yes_no" => true } }
+  let(:valid_attributes2) { { "text" => "MyText2", "survey_id" => survey.id, index: 2, "rating" => true } }
+  let(:valid_attributes3) { { "text" => "MyText3", "survey_id" => survey.id, index: 3, "free_form" => true } }
+
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -78,7 +81,7 @@ describe QuestionsController do
 
       it "redirects to the created question" do
         post :create, {customer_id: survey.customer.id, survey_id: survey.id, :question => valid_attributes}, valid_session
-        response.should redirect_to(customer_survey_question_path(survey.customer, survey, Question.last))
+        response.should redirect_to(customer_survey_path(survey.customer, survey))
       end
     end
 
@@ -154,7 +157,21 @@ describe QuestionsController do
     it "redirects to the questions list" do
       question = Question.create! valid_attributes
       delete :destroy, {customer_id: survey.customer.id, survey_id: survey.id, :id => question.to_param}, valid_session
-      response.should redirect_to(customer_survey_questions_path(survey.customer, survey))
+      response.should redirect_to(customer_survey_path(survey.customer, survey))
+    end
+
+    it "updates the indexes of all the questions" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      question3 = Question.create! valid_attributes3
+      survey.questions.first.index.should eq 1
+      survey.questions.last.index.should eq 3
+      delete :destroy, {customer_id: survey.customer.id, survey_id: survey.id, :id => question2.to_param}, valid_session
+      survey.questions.size.should eq 2
+      survey.questions.first.index.should eq 1
+      survey.questions.last.index.should eq 2
+      survey.questions.last.text.should eq question3.text
+      survey.questions.first.text.should eq question1.text
     end
   end
 

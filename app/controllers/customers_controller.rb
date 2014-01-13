@@ -76,10 +76,10 @@ class CustomersController < ApplicationController
 
     def customer_bread_crumb
       customers_bread_crumb
-      add_breadcrumb @customer.name, customer_path(@customer)
+      add_breadcrumb @customer.name, customer_path(@customer), class: "bread_crumb"
     end
 
     def customers_bread_crumb
-      add_breadcrumb "Customers", customers_path, class: "bread_crumb"
+      #add_breadcrumb "Customers", customers_path, class: "bread_crumb"
     end
 end
