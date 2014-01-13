@@ -4,7 +4,7 @@
   <tbody>
     <% @customers.each do |customer| %>
       <tr>
-        <td><%= link_to customer.name, edit_customer_path(customer) %></td>
+        <td><%= link_to customer.name, customer_path(customer) %></td>
         <td><%= link_to 'Surveys', customer_surveys_path(customer) %></td>
         <td><%= link_to 'Destroy', customer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>

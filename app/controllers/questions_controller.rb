@@ -33,7 +33,7 @@ class QuestionsController < ApplicationController
 
     respond_to do |format|
       if @question.save
-        format.html { redirect_to customer_survey_question_path(@customer, @survey, @question), notice: 'Question was successfully created.' }
+        format.html { redirect_to customer_survey_path(@customer, @survey), notice: 'Question was successfully created.' }
         format.json { render action: 'show', status: :created, location: @question }
       else
         format.html { render action: 'new' }
@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
     @question.destroy
     update_indicies @question.index
     respond_to do |format|
-      format.html { redirect_to customer_survey_questions_path(@customer, @survey) }
+      format.html { redirect_to customer_survey_path(@customer, @survey) }
       format.json { head :no_content }
     end
   end
@@ -89,11 +89,8 @@ class QuestionsController < ApplicationController
     end
 
   def questions_bread_crumb
-    add_breadcrumb 'Customers', customers_path
     add_breadcrumb @customer.name, customer_path(@customer)
-    add_breadcrumb 'Surveys', customer_surveys_path(@customer)
     add_breadcrumb @survey.name, customer_survey_path(@customer, @survey)
-    add_breadcrumb "Questions", customer_survey_questions_path(@customer, @survey)
   end
 
   def question_bread_crumb
