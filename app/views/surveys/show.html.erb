@@ -2,18 +2,44 @@
   <table class="table table-striped table-bordered table-hover table-condensed">
   <thead>
     <tr>
-      <th colspan="100%"><%=@survey.name%></th>
+      <th colspan="100%">
+            <%= link_to @survey.name, edit_customer_survey_path(@customer, @survey) %>
+      </th>
+    </tr>
+    <tr>
+      <th>Order</th>
+      <th>Text</th>
+      <th>Question Type</th>
+      <th>Move Up/Down</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-  <% @survey.questions.each do |question| %>
+  <% @survey.questions.order(:index).each do |question| %>
   <tr>
-    <td><%=question.index%></td>
-    <td><%=question.text%></td>
     <td>
-      <% if question.yes_no? %>Yes/No<% end %>
-      <% if question.rating? %>Rating<% end %>
-      <% if question.free_form? %>Free Form<% end %>
+      <div class="divLink">
+        <%= link_to question.index, edit_customer_survey_question_path(@customer,@survey,question)%>
+      </div>
+    </td>
+    <td>
+      <div class="divLink">
+        <%= link_to question.text, edit_customer_survey_question_path(@customer,@survey,question)%>
+      </div>
+    </td>
+    <td>
+      <div class="divLink">
+        <%= link_to question.yes_no? ? "Yes/No" : question.rating? ? "Rating" : "Free Form", edit_customer_survey_question_path(@customer, @survey,question) %>
+      </div>
+    </td>
+    <td>
+      <% if question.index > 1 %>
+        <%= link_to '&uarr;'.html_safe, up_customer_survey_question_path(@customer,@survey,question) %>
+      <% end %>
+      <% if question.index < @survey.questions.size %>
+        <%= link_to "&darr;".html_safe, down_customer_survey_question_path(@customer,@survey,question) %>
+      <% end %>
+
     </td>
     <td>
       <%= link_to 'Delete', customer_survey_question_path(@customer,@survey,question), method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -23,6 +49,20 @@
   <tr>
     <td colspan="100%">
       <%= link_to 'New Question', new_customer_survey_question_path(@customer, @survey) %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="divLink">
+        <%= link_to "Completed Message:", edit_customer_survey_path(@customer, @survey) %>
+      </div>
+    </td>
+    <td>
+      <div class="divLink">
+      <pre>
+<%= link_to @survey.complete_message, edit_customer_survey_path(@customer, @survey) %>
+      </pre>
+      </div>
     </td>
   </tr>
   </tbody>

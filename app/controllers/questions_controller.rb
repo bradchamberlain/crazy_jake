@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :set_question, only: [:show, :edit, :update, :destroy, :down, :up]
   before_filter :set_survey
   before_filter :questions_bread_crumb, only: [:index, :new, :create]
   before_filter :question_bread_crumb, only: [:show, :edit, :update]
@@ -47,7 +47,7 @@ class QuestionsController < ApplicationController
   def update
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to customer_survey_question_path(@customer, @survey, @question), notice: 'Question was successfully updated.' }
+        format.html { redirect_to customer_survey_path(@customer, @survey), notice: 'Question was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -64,6 +64,40 @@ class QuestionsController < ApplicationController
     update_indicies @question.index
     respond_to do |format|
       format.html { redirect_to customer_survey_path(@customer, @survey) }
+      format.json { head :no_content }
+    end
+  end
+
+  def up
+    question = @survey.questions.where(index: @question.index - 1).first
+    @question.index = @survey.questions.size + 1
+    @question.save!
+
+    question.index = question.index + 1
+    question.save!
+
+    @question.index = question.index - 1
+    @question.save!
+
+    respond_to do |format|
+      format.html {redirect_to customer_survey_path(@customer, @survey), notice: 'Question was successfully moved up.'}
+      format.json { head :no_content }
+    end
+  end
+
+  def down
+    question = @survey.questions.where(index: @question.index + 1).first
+    @question.index = @survey.questions.size + 1
+    @question.save!
+
+    question.index = question.index - 1
+    question.save!
+
+    @question.index = question.index + 1
+    @question.save!
+
+    respond_to do |format|
+      format.html {redirect_to customer_survey_path(@customer, @survey), notice: 'Question was successfully moved down.'}
       format.json { head :no_content }
     end
   end
@@ -95,7 +129,7 @@ class QuestionsController < ApplicationController
 
   def question_bread_crumb
     questions_bread_crumb
-    add_breadcrumb @question.index, customer_survey_question_path(@customer, @survey, @question)
+    add_breadcrumb @question.text, edit_customer_survey_question_path(@customer, @survey, @question)
   end
 
   def update_indicies index

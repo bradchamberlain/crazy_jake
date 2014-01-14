@@ -123,7 +123,7 @@ describe QuestionsController do
       it "redirects to the question" do
         question = Question.create! valid_attributes
         put :update, {customer_id: survey.customer.id, survey_id: survey.id,:id => question.to_param, :question => valid_attributes}, valid_session
-        response.should redirect_to(customer_survey_question_path(survey.customer, survey, question))
+        response.should redirect_to(customer_survey_path(survey.customer, survey))
       end
     end
 
@@ -172,6 +172,30 @@ describe QuestionsController do
       survey.questions.last.index.should eq 2
       survey.questions.last.text.should eq question3.text
       survey.questions.first.text.should eq question1.text
+    end
+  end
+
+  describe "MOVE up" do
+    it "rearranges the question order" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      survey.questions.where(text: question1.text)[0].index.should eq 1
+      survey.questions.where(text: question2.text)[0].index.should eq 2
+      get :up, {customer_id: survey.customer.id, survey_id: survey.id, id: question2.to_param}
+      survey.questions.where(text: question1.text)[0].index.should eq 2
+      survey.questions.where(text: question2.text)[0].index.should eq 1
+    end
+  end
+
+  describe "MOVE down" do
+    it "rearranges the question order" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      survey.questions.where(text: question1.text)[0].index.should eq 1
+      survey.questions.where(text: question2.text)[0].index.should eq 2
+      get :down, {customer_id: survey.customer.id, survey_id: survey.id, id: question1.to_param}
+      survey.questions.where(text: question1.text)[0].index.should eq 2
+      survey.questions.where(text: question2.text)[0].index.should eq 1
     end
   end
 

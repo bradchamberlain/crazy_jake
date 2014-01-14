@@ -51,7 +51,6 @@ group :development, :test do
   gem 'zeus'
   gem 'jasmine-rails'
   gem 'simplecov'
-  gem 'webmock'
   gem 'faker'
   gem 'json-schema', '~>1.1'
   gem 'fdoc'
@@ -59,6 +58,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'webmock'
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
 end

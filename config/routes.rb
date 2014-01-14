@@ -6,7 +6,12 @@ CrazyJake::Application.routes.draw do
 
   resources :customers do
     resources :surveys do
-      resources :questions
+      resources :questions do
+        member do
+          get 'down'
+          get 'up'
+        end
+      end
     end
   end
 
