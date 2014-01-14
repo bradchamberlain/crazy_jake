@@ -12,7 +12,7 @@ unless ENV['REMOTE_INTEGRATION']
     if SimpleCov.result.covered_percent < SimpleCov.minimum_coverage
       fail_msg = "#{'%.2f' % SimpleCov.result.covered_percent}% test coverage?? Really??!!"
       STDERR.puts "\0
-33[0;31m#{fail_msg}\033[0m\nWrite more tests"
+#{fail_msg}\033[0m\nWrite more tests"
       exit 1
     end
   end
