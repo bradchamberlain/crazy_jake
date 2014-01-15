@@ -13,6 +13,9 @@
           <td>
             <%= link_to survey.name, customer_survey_path(@customer,survey) %>
           </td>
+          <td>
+            <%= link_to "Reporting", customer_survey_reports_path(@customer,survey) %>
+          </td>
         </tr>
       <% end %>
       <tr>
