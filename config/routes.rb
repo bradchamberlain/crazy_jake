@@ -6,6 +6,7 @@ CrazyJake::Application.routes.draw do
 
   resources :customers do
     resources :surveys do
+      resources :reports, only: [:index]
       resources :questions do
         member do
           get 'down'

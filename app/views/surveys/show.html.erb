@@ -74,3 +74,6 @@
     <image src="<%=qr_codes_url(survey_id: @survey.id, format: :jpeg)%>" width="100" />
   </a>
 </div>
+<div>
+  <%= link_to "Reporting", customer_survey_reports_path(@customer,@survey) %>
+</div>
