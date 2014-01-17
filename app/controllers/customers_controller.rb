@@ -1,4 +1,5 @@
 class CustomersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
   before_filter :customers_bread_crumb, only: [:index, :new, :create]
   before_filter :customer_bread_crumb, only: [:show, :edit, :update]
@@ -6,7 +7,7 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.all
+    @customers = current_user.admin? ? Customer.all : [current_user.customer]
   end
 
   # GET /customers/1
@@ -30,7 +31,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
+        format.html { redirect_to @customer, notice: "#{@customer.name} was successfully created." }
         format.json { render action: 'show', status: :created, location: @customer }
       else
         format.html { render action: 'new' }
@@ -44,7 +45,7 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        format.html { redirect_to @customer, notice: "#{@customer.name} was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -58,7 +59,7 @@ class CustomersController < ApplicationController
   def destroy
     @customer.destroy
     respond_to do |format|
-      format.html { redirect_to customers_url }
+      format.html { redirect_to customers_url, notice: "#{@customer.name} was deleted."}
       format.json { head :no_content }
     end
   end
@@ -66,7 +67,7 @@ class CustomersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
-      @customer = Customer.find(params[:id])
+      @customer = current_user.admin? ? Customer.find(params[:id]) : current_user.customer
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -80,6 +81,8 @@ class CustomersController < ApplicationController
     end
 
     def customers_bread_crumb
-      #add_breadcrumb "Customers", customers_path, class: "bread_crumb"
+      if current_user.admin?
+        add_breadcrumb "Customers", customers_path, class: "bread_crumb"
+      end
     end
 end

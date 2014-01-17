@@ -6,6 +6,11 @@ describe ReportsController do
   let(:valid_attributes2) { { "text" => "MyText2", "survey_id" => survey.id, index: 2, "rating" => true } }
   let(:valid_attributes3) { { "text" => "MyText3", "survey_id" => survey.id, index: 3, "free_form" => true } }
 
+  before :each do
+    user = FactoryGirl.create(:user)
+    sign_in user
+  end
+
   describe "GET index" do
     it "assigns all questions as @questions" do
       question1 = Question.create! valid_attributes

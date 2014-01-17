@@ -34,6 +34,11 @@ describe QuestionsController do
   # QuestionsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before :each do
+    user = FactoryGirl.create(:user)
+    sign_in user
+  end
+
   describe "GET index" do
     it "assigns all questions as @questions" do
       question = Question.create! valid_attributes

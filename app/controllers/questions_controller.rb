@@ -63,7 +63,7 @@ class QuestionsController < ApplicationController
     @question.destroy
     update_indicies @question.index
     respond_to do |format|
-      format.html { redirect_to customer_survey_path(@customer, @survey) }
+      format.html { redirect_to customer_survey_path(@customer, @survey), notice: "Question was deleted" }
       format.json { head :no_content }
     end
   end
@@ -115,7 +115,8 @@ class QuestionsController < ApplicationController
 
     def set_survey
       @survey = Survey.find(params[:survey_id])
-      @customer = @survey.customer
+      @customer = current_user.admin? ? @survey.customer : current_user.customer
+      raise unless @survey.customer == @customer
     end
 
     def survey_index
@@ -123,6 +124,7 @@ class QuestionsController < ApplicationController
     end
 
   def questions_bread_crumb
+    add_breadcrumb "Customers", customers_path if current_user.admin?
     add_breadcrumb @customer.name, customer_path(@customer)
     add_breadcrumb @survey.name, customer_survey_path(@customer, @survey)
   end

@@ -32,7 +32,7 @@ class SurveysController < ApplicationController
 
     respond_to do |format|
       if @survey.save
-        format.html { redirect_to customer_survey_path(@customer,@survey), notice: 'Survey was successfully created.' }
+        format.html { redirect_to customer_survey_path(@customer,@survey), notice: "#{@survey.name} was successfully created." }
         format.json { render action: 'show', status: :created, location: @survey }
       else
         format.html { render action: 'new' }
@@ -46,7 +46,7 @@ class SurveysController < ApplicationController
   def update
     respond_to do |format|
       if @survey.update(survey_params)
-        format.html { redirect_to customer_survey_path(@customer,@survey), notice: 'Survey was successfully updated.' }
+        format.html { redirect_to customer_survey_path(@customer,@survey), notice: "#{@survey.name} was successfully updated." }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -60,15 +60,18 @@ class SurveysController < ApplicationController
   def destroy
     @survey.destroy
     respond_to do |format|
-      format.html { redirect_to customer_surveys_path(@customer) }
+      format.html { redirect_to customer_surveys_path(@customer), notice: "#{@survey.name} was deleted" }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
     def set_survey
+      set_customer unless @customer
       @survey = Survey.find(params[:id])
+      raise unless @survey.customer == @customer
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -77,10 +80,11 @@ class SurveysController < ApplicationController
     end
 
     def set_customer
-      @customer = Customer.find(params[:customer_id])
+      @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     end
 
     def surveys_bread_crumb
+      add_breadcrumb 'Customers', customers_path if current_user.admin?
       add_breadcrumb @customer.name, customer_path(@customer)
     end
 
