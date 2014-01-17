@@ -1,0 +1,20 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th>Email</th>
+    <th>Sign In Count</th>
+    <th>Administrator</th>
+    <th>Customer</th>
+  </tr>
+  </thead>
+<% @users.try(:each) do |user| %>
+  <tr>
+    <td><%= link_to user.email, edit_user_path(user) %></td>
+    <td><%= link_to user.sign_in_count, edit_user_path(user) %></td>
+    <td><%= link_to user.admin.to_s, edit_user_path(user) %></td>
+    <td><%= link_to user.customer.name, customer_path(user.customer) if user.customer%></td>
+    <td><%= link_to 'Delete', user_path(user), method: :delete if current_user.admin? and current_user != user %></td>
+  </tr>
+<% end %>
+</table>
+<%= link_to 'New User', new_user_path if current_user.admin? %>

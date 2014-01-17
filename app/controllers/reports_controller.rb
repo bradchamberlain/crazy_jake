@@ -46,8 +46,9 @@ class ReportsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def build_reports
-    @customer = Customer.find(params[:customer_id])
+    @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     @survey = Survey.find(params[:survey_id])
+    raise unless @survey.customer == @customer
   end
 
   def bread_crumb

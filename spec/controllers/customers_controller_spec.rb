@@ -19,6 +19,7 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe CustomersController do
+  include Devise::TestHelpers
 
   # This should return the minimal set of attributes required to create a valid
   # Customer. As you add validations to Customer, be sure to
@@ -31,6 +32,8 @@ describe CustomersController do
   let(:valid_session) { {} }
   before :each do
     Customer.destroy_all
+    user = FactoryGirl.create(:user)
+    sign_in user
   end
 
   describe "GET index" do

@@ -34,6 +34,8 @@ describe SurveysController do
 
   before :each do
     Customer.destroy_all
+    user = FactoryGirl.create(:user)
+    sign_in user
   end
 
 
