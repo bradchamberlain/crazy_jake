@@ -1,4 +1,5 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_question, only: [:show, :edit, :update, :destroy, :down, :up]
   before_filter :set_survey
   before_filter :questions_bread_crumb, only: [:index, :new, :create]

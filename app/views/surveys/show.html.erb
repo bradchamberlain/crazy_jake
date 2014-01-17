@@ -75,5 +75,5 @@
   </a>
 </div>
 <div>
-  <%= link_to "Reporting", customer_survey_reports_path(@customer,@survey) %>
+  <%= link_to "Reporting", customer_survey_reports_path(@customer,@survey,format: 'pdf'),target: "_blank" %>
 </div>

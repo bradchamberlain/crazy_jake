@@ -41,6 +41,9 @@ gem "breadcrumbs_on_rails"
 
 gem 'bootstrap-sass'
 
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+
 group :development do
   gem 'rails_layout'
 end

@@ -40,9 +40,7 @@
       </div>
     </div>
   <% elsif @question.free_form? %>
-      <textarea id="_response" name="_response">
-
-      </textarea>
+    <textarea id="_response" name="_response"></textarea>
   <% end %>
   </div>
   <%= tag(:input, type: "hidden", name: "question_id", value: @question.id ) %>
