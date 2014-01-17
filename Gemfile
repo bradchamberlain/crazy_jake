@@ -51,7 +51,6 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'zeus'
-  gem 'jasmine-rails'
   gem 'simplecov'
   gem 'faker'
   gem 'json-schema', '~>1.1'
