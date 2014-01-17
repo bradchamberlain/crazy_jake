@@ -41,6 +41,9 @@ gem "breadcrumbs_on_rails"
 
 gem 'bootstrap-sass'
 
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+
 group :development do
   gem 'rails_layout'
 end
@@ -51,7 +54,6 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'zeus'
-  gem 'jasmine-rails'
   gem 'simplecov'
   gem 'faker'
   gem 'json-schema', '~>1.1'

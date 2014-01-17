@@ -1,4 +1,5 @@
 class SurveysController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_survey, only: [:show, :edit, :update, :destroy]
   before_filter :set_customer
   before_filter :survey_bread_crumb, only: [:show, :edit, :update]

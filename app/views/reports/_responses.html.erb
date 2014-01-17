@@ -1,0 +1,21 @@
+<tr>
+  <td colspan="100%">
+    <%= question.text %>
+    <div class="pull-right">
+      Respondents: <%=(@answers[question.id]/@complete_surveys.size.to_f*100).round(1)%>%
+    </div>
+  </td>
+</tr>
+<%@responses[question.id].each do |k,v| %>
+    <tr>
+      <td></td>
+      <td>
+        <small>
+          <%=v[0]%>
+        </small>
+      </td>
+      <td>
+        <%=v[1]%>
+      </td>
+    </tr>
+<% end %>

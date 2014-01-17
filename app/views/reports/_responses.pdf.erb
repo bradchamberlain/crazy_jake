@@ -1,0 +1,25 @@
+<tr>
+  <td colspan="100%">
+    <div  style="margin-left: 80px;font-weight: bold; font-size:12px">
+      <%= question.text %>  Respondents: <%=(@answers[question.id]/@complete_surveys.size.to_f*100).round(1)%>%
+    </div>
+  </td>
+</tr>
+<tr>
+  <td><div style="margin-left: 80px;font-weight: bold; font-size: 12px">Date</div></td>
+  <td><div style="margin-left: 80px;font-weight: bold; font-size: 12px">Comment</div></td>
+</tr>
+<%@responses[question.id].each do |k,v| %>
+    <tr>
+      <td>
+        <div style="margin-left: 80px;font-weight: bold; font-size: 12px">
+          <%=v[0]%>
+        </div>
+      </td>
+      <td>
+        <div style="font-weight: bold; font-size: 12px">
+          <%=v[1]%>
+        </div>
+      </td>
+    </tr>
+<% end %>

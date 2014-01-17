@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  before_action :authenticate_user!
   before_filter :build_reports
   before_filter :bread_crumb
 
@@ -39,6 +40,12 @@ class ReportsController < ApplicationController
           @responses[question.id][i] =  [c.created_at.strftime("%b %e, %Y"), c.responses[question.id.to_s]] if c.responses[question.id.to_s].present?
           @answers[question.id] = @answers[question.id] + 1 if c.responses[question.id.to_s].present?
         end
+      end
+    end
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render :pdf => "file_name"
       end
     end
   end

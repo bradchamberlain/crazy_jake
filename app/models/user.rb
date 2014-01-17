@@ -5,4 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :customer
+
+  validates_presence_of :customer_id, unless: :admin?
 end
