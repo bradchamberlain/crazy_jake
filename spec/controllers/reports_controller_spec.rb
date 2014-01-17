@@ -23,6 +23,15 @@ describe ReportsController do
       get :index, {customer_id: survey.customer.id, survey_id: survey.id}, {}
       response.should be_success
     end
+
+    it "gets PDF" do
+      cs = CompleteSurvey.new
+      cs.survey = survey
+      cs.save!
+      get :index, {customer_id: survey.customer.id, survey_id: survey.id, format: :pdf}, {}
+      response.should be_success
+    end
+
   end
 
 end
