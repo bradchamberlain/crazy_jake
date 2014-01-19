@@ -1,6 +1,6 @@
 class SurveysController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_survey, only: [:show, :edit, :update, :destroy]
+  before_action :set_survey, only: [:show, :edit, :update, :destroy, :card]
   before_filter :set_customer
   before_filter :survey_bread_crumb, only: [:show, :edit, :update]
   before_filter :surveys_bread_crumb, only: [:index, :new, :create]
@@ -64,6 +64,16 @@ class SurveysController < ApplicationController
       format.html { redirect_to customer_surveys_path(@customer), notice: "#{@survey.name} was deleted" }
       format.json { head :no_content }
     end
+  end
+
+  def card
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render :pdf => "file_name"
+      end
+    end
+
   end
 
   private

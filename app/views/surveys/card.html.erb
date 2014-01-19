@@ -1,0 +1,55 @@
+<table style="width:6in;height:4.5in;border:1px gray dotted">
+  <tr><th colspan="2"><%=@customer.name%></th></tr>
+  <tr>
+    <td>
+      <table>
+        <% @survey.questions.where(free_form: false).each_with_index do |q, i| %>
+            <tr>
+              <td><%=i+1%>:</td>
+              <td colspan="100%"><%=q.text%></td>
+            </tr>
+            <% if q.yes_no? %>
+                <tr>
+                  <td></td>
+                  <td colspan="100%">
+                    <span style="float:left;">Yes</span>
+                    <span style="float:right;">No</span>
+                  </td>
+                </tr>
+            <% elsif q.rating? %>
+                <tr>
+                  <td></td>
+                  <td><input type="radio"></td>
+                  <td><input type="radio"></td>
+                  <td><input type="radio"></td>
+                  <td><input type="radio"></td>
+                  <td><input type="radio"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td colspan="100%">
+                    <span style="float:left;">Extremely Satisfied</span>
+                    <span style="float:right;">Very Unsatisfied</span>
+                  </td>
+                </tr>
+            <% end %>
+        <% end %>
+      </table>
+    </td>
+    <td>
+      <%= image_tag qr_codes_url(survey_id: @survey.id, format: :svg), style: "width:100px" %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Comments
+    </td>
+  </tr>
+  <% (1..4).each do %>
+    <tr>
+      <td colspan="100%">
+        <hr style="width:100%"/>
+      </td>
+    </tr>
+  <% end %>
+</table>

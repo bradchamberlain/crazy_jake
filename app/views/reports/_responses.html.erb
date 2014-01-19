@@ -2,7 +2,7 @@
   <td colspan="100%">
     <%= question.text %>
     <div class="pull-right">
-      Respondents: <%=(@answers[question.id]/@complete_surveys.size.to_f*100).round(1)%>%
+      Respondents: (<%=(@answers[question.id]/@complete_surveys.size.to_f*100).round(1)%>%)
     </div>
   </td>
 </tr>
