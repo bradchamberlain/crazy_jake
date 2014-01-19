@@ -4,6 +4,7 @@ class SurveysController < ApplicationController
   before_filter :set_customer
   before_filter :survey_bread_crumb, only: [:show, :edit, :update]
   before_filter :surveys_bread_crumb, only: [:index, :new, :create]
+  require 'rqrcode'
 
   # GET /surveys
   # GET /surveys.json
@@ -67,10 +68,11 @@ class SurveysController < ApplicationController
   end
 
   def card
+    @qr = RQRCode::QRCode.new(qr_survey_path,:size => 8)
     respond_to do |format|
       format.html
       format.pdf do
-        render :pdf => "file_name"
+        render :pdf => "survey_cards"
       end
     end
 
@@ -85,7 +87,12 @@ class SurveysController < ApplicationController
       raise unless @survey.customer == @customer
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def qr_survey_path
+      complete_surveys_url({survey_id: @survey.id}.merge(params.select{|k,v| k.match /^c_/}))
+    end
+
+
+  # Never trust parameters from the scary internet, only allow the white list through.
     def survey_params
       params.require(:survey).permit(:name, :customer_id, :complete_message)
     end

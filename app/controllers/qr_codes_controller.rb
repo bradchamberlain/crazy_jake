@@ -2,7 +2,6 @@ class QrCodesController < ApplicationController
   before_filter :find_survey
 
   def index
-    puts "================================================================================================"
     respond_to do |format|
       if @survey
         format.html
@@ -18,7 +17,6 @@ class QrCodesController < ApplicationController
         format.jpeg
       end
     end
-    puts "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
   end
 
   private

@@ -78,5 +78,5 @@
   Links (Open in new window):<br /> &nbsp; &nbsp;
   <%= link_to "View Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%> |
   <%= link_to "View Survey Report", customer_survey_reports_path(@customer,@survey,format: 'pdf'),target: "_blank" %> |
-  <%= link_to "View Card", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>
+  <%= link_to "View Printable Card", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>(first 4 questions only)
 </div>
