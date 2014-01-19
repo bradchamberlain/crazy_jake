@@ -68,12 +68,15 @@
   </tbody>
 </table>
 </div>
-<div>
-  Qr Image:
+<div class="category">
+  QR code for this survey:
   <a href="<%=complete_surveys_path(survey_id: @survey.id)%>" target="_blank">
-    <image src="<%=qr_codes_url(survey_id: @survey.id, format: :jpeg)%>" width="100" />
+    <image src="<%=qr_codes_url(survey_id: @survey.id, format: :jpeg)%>" width="100px" />
   </a>
 </div>
-<div>
-  <%= link_to "Reporting", customer_survey_reports_path(@customer,@survey,format: 'pdf'),target: "_blank" %>
+<div class="category">
+  Links (Open in new window):<br /> &nbsp; &nbsp;
+  <%= link_to "View Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%> |
+  <%= link_to "View Survey Report", customer_survey_reports_path(@customer,@survey,format: 'pdf'),target: "_blank" %> |
+  <%= link_to "View Card", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>
 </div>

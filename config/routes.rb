@@ -9,6 +9,9 @@ CrazyJake::Application.routes.draw do
 
   resources :customers do
     resources :surveys do
+        member do
+          get "card"
+        end
       resources :reports, only: [:index]
       resources :questions do
         member do

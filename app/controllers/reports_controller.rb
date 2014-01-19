@@ -3,6 +3,8 @@ class ReportsController < ApplicationController
   before_filter :build_reports
   before_filter :bread_crumb
 
+  require 'open-uri'
+
   # GET /customer/:id/reports
   def index
     @complete_surveys = CompleteSurvey.where(survey: @survey).where.not(responses: nil)
