@@ -152,6 +152,19 @@ describe SurveysController do
     end
   end
 
+  describe "CARD" do
+    it "shows html card" do
+      survey = Survey.create! valid_attributes
+      put :card, {id: survey.to_param, customer_id: customer.id}, valid_session
+      response.should render_template("card")
+    end
+    it "shows pdf card" do
+      survey = Survey.create! valid_attributes
+      put :card, {id: survey.to_param, customer_id: customer.id, format: "pdf"}, valid_session
+      response.should render_template("card")
+    end
+  end
+
   describe "DELETE destroy" do
     it "destroys the requested survey" do
       survey = Survey.create! valid_attributes

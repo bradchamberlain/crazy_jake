@@ -1,0 +1,92 @@
+<table style="width:6in;height:4.5in;border:1px gray dotted">
+  <tr><th colspan="2"><%=@customer.name%></th></tr>
+  <tr>
+    <td style="width:4.6in;">
+      <table>
+        <% @survey.questions.where(free_form: false)[0..3].each_with_index do |q, i| %>
+            <tr>
+              <td><%=i+1%>:</td>
+              <td colspan="100%"><%=q.text%></td>
+            </tr>
+            <% if q.yes_no? %>
+                <tr>
+                  <td></td>
+                  <td colspan="100%">
+                    <span style="float:left;font-size:smaller;">Yes</span>
+                    <span style="float:right;font-size:smaller;">No</span>
+                  </td>
+                </tr>
+            <% elsif q.rating? %>
+                <tr>
+                  <td></td>
+                  <td align="center"><input type="radio"></td>
+                  <td align="center"><input type="radio"></td>
+                  <td align="center"><input type="radio"></td>
+                  <td align="center"><input type="radio"></td>
+                  <td align="center"><input type="radio"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td colspan="100%">
+                    <span style="float:left;font-size: smaller; color:#535353;">Extremely Satisfied</span>
+                    <span style="float:right;font-size:smaller; color:#535353;">Very Unsatisfied</span>
+                  </td>
+                </tr>
+            <% end %>
+        <% end %>
+      </table>
+    </td>
+    <td>
+      <table style="border: 1px #f3f3f3 solid; background-color: #f3f3f3">
+        <tr>
+          <td colspan="100%"><span style="font-size: x-small;">Date</span></td>
+        </tr>
+        <tr>
+          <td style="border-bottom: 1px solid black;width:25px"></td>
+          <td>/</td>
+          <td style="border-bottom: 1px solid black;width:25px"></td>
+          <td>/</td>
+          <td style="border-bottom: 1px solid black;width:25px"></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span style="font-size:x-small">Month</span>
+          </td>
+          <td>
+            <span style="font-size:x-small">Day</span>
+          </td>
+          <td></td>
+          <td>
+            <span style="font-size:x-small">Year</span>
+          </td>
+        </tr>
+      </table>
+      <p />
+      <table cellpadding=0 cellspacing=0>
+        <% @qr.modules.each_index do |x| -%>
+            <tr>
+              <% @qr.modules.each_index do |y| -%>
+                  <% if @qr.dark?(x,y) -%>
+                      <td class="black" style="background-color: black;height:2px; width:2px;"/>
+                  <% else -%>
+                      <td class="white" style="background-color: white;height:2px;width:2px;"/>
+                  <% end -%>
+              <% end -%>
+            </tr>
+        <% end -%>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Comments
+    </td>
+  </tr>
+  <% (1..4).each do %>
+      <tr>
+        <td colspan="100%">
+          <hr style="width:100%"/>
+        </td>
+      </tr>
+  <% end %>
+</table>
