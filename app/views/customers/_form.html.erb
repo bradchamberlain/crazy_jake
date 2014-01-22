@@ -12,12 +12,29 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
+    <%= f.label :name %><br />
     <%= f.text_field :name %>
   </div>
   <div class="field">
+    <%= f.label :logo %><br />
     <%= f.file_field :logo %>
   </div>
+  <div class="field">
+    <%= f.label :menu_text_color %><br />
+    <%= f.text_field :menu_text_color %>
+  </div>
+    <div class="field">
+      <%= f.label :menu_bg_color, "Menu Background Color" %><br />
+      <%= f.text_field :menu_bg_color %>
+    </div>
+    <div class="field">
+      <%= f.label :body_text_color %><br />
+      <%= f.text_field :body_text_color %>
+    </div>
+    <div class="field">
+      <%= f.label :body_bg_color, "Body Background Color" %><br />
+      <%= f.text_field :body_bg_color %>
+    </div>
   <div class="actions">
     <%= f.submit %>
   </div>
