@@ -41,6 +41,19 @@ describe CustomersController do
       customer = Customer.create! valid_attributes
       get :index, {}, valid_session
       assigns(:customers).should eq([customer])
+      Customer.destroy_all
+    end
+
+    it "renders show customer" do
+      customer = Customer.create! valid_attributes
+      user = FactoryGirl.build(:reg_user)
+      user.customer = customer
+      user.save!
+      sign_in user
+      get :index, {}, valid_session
+      response.should redirect_to customer_path(user.customer)
+      User.destroy user
+      Customer.destroy_all
     end
   end
 
@@ -49,6 +62,7 @@ describe CustomersController do
       customer = Customer.create! valid_attributes
       get :show, {:id => customer.to_param}, valid_session
       assigns(:customer).should eq(customer)
+      Customer.destroy_all
     end
   end
 
@@ -56,6 +70,7 @@ describe CustomersController do
     it "assigns a new customer as @customer" do
       get :new, {}, valid_session
       assigns(:customer).should be_a_new(Customer)
+      Customer.destroy_all
     end
   end
 
@@ -64,6 +79,7 @@ describe CustomersController do
       customer = Customer.create! valid_attributes
       get :edit, {:id => customer.to_param}, valid_session
       assigns(:customer).should eq(customer)
+      Customer.destroy_all
     end
   end
 
@@ -73,17 +89,20 @@ describe CustomersController do
         expect {
           post :create, {:customer => valid_attributes}, valid_session
         }.to change(Customer, :count).by(1)
+        Customer.destroy_all
       end
 
       it "assigns a newly created customer as @customer" do
         post :create, {:customer => valid_attributes}, valid_session
         assigns(:customer).should be_a(Customer)
         assigns(:customer).should be_persisted
+        Customer.destroy_all
       end
 
       it "redirects to the created customer" do
         post :create, {:customer => valid_attributes}, valid_session
         response.should redirect_to(Customer.last)
+        Customer.destroy_all
       end
     end
 
@@ -93,6 +112,7 @@ describe CustomersController do
         Customer.any_instance.stub(:save).and_return(false)
         post :create, {:customer => { "name" => "invalid value" }}, valid_session
         assigns(:customer).should be_a_new(Customer)
+        Customer.destroy_all
       end
 
       it "re-renders the 'new' template" do
@@ -100,6 +120,7 @@ describe CustomersController do
         Customer.any_instance.stub(:save).and_return(false)
         post :create, {:customer => { "name" => "invalid value" }}, valid_session
         response.should render_template("new")
+        Customer.destroy_all
       end
     end
   end
@@ -114,18 +135,21 @@ describe CustomersController do
         # submitted in the request.
         Customer.any_instance.should_receive(:update).with({ "name" => "MyText" })
         put :update, {:id => customer.to_param, :customer => { "name" => "MyText" }}, valid_session
+        Customer.destroy_all
       end
 
       it "assigns the requested customer as @customer" do
         customer = Customer.create! valid_attributes
         put :update, {:id => customer.to_param, :customer => valid_attributes}, valid_session
         assigns(:customer).should eq(customer)
+        Customer.destroy_all
       end
 
       it "redirects to the customer" do
         customer = Customer.create! valid_attributes
         put :update, {:id => customer.to_param, :customer => valid_attributes}, valid_session
         response.should redirect_to(customer)
+        Customer.destroy_all
       end
     end
 
@@ -136,6 +160,7 @@ describe CustomersController do
         Customer.any_instance.stub(:save).and_return(false)
         put :update, {:id => customer.to_param, :customer => { "name" => "invalid value" }}, valid_session
         assigns(:customer).should eq(customer)
+        Customer.destroy_all
       end
 
       it "re-renders the 'edit' template" do
@@ -144,6 +169,7 @@ describe CustomersController do
         Customer.any_instance.stub(:save).and_return(false)
         put :update, {:id => customer.to_param, :customer => { "name" => "invalid value" }}, valid_session
         response.should render_template("edit")
+        Customer.destroy_all
       end
     end
   end
@@ -154,12 +180,14 @@ describe CustomersController do
       expect {
         delete :destroy, {:id => customer.to_param}, valid_session
       }.to change(Customer, :count).by(-1)
+      Customer.destroy_all
     end
 
     it "redirects to the customers list" do
       customer = Customer.create! valid_attributes
       delete :destroy, {:id => customer.to_param}, valid_session
       response.should redirect_to(customers_url)
+      Customer.destroy_all
     end
   end
 

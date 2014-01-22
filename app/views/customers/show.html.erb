@@ -1,27 +1,19 @@
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover table-condensed">
-    <thead>
-      <tr>
-        <td>
-          Surveys:
-        </td>
-      </tr>
-    </thead>
-    <tbody>
-      <% @customer.surveys.each do |survey| %>
-        <tr>
-          <td>
-            <%= link_to survey.name, customer_survey_path(@customer,survey) %>
-          </td>
-        </tr>
-      <% end %>
-      <tr>
-        <td colspan="100%">
-          <%= link_to 'Create New Survey', new_customer_survey_path(@customer) %>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
+<table class="table table-striped table-bordered table-hover table-condensed">
+  <tr>
+    <th>
+      Display Name:
+    </th>
+    <td>
+      <%=@customer.name%>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Logo
+    </th>
+    <td>
+      <%=image_tag @customer.logo.url(:small)%>
+    </td>
+  </tr>
+</table>
+<%= link_to "Update Profile", edit_customer_path(@customer) %>

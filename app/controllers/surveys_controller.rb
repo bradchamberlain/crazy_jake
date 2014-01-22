@@ -15,6 +15,7 @@ class SurveysController < ApplicationController
   # GET /surveys/1
   # GET /surveys/1.json
   def show
+    rqrcode
   end
 
   # GET /surveys/new
@@ -68,7 +69,7 @@ class SurveysController < ApplicationController
   end
 
   def card
-    @qr = RQRCode::QRCode.new(qr_survey_path,:size => 8)
+    rqrcode
     respond_to do |format|
       format.html
       format.pdf do
@@ -80,6 +81,10 @@ class SurveysController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
+    def rqrcode
+      @qr = RQRCode::QRCode.new(qr_survey_path,:size => 8)
+    end
 
     def set_survey
       set_customer unless @customer
