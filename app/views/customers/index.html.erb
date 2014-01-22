@@ -3,7 +3,6 @@
 <table class="table table-striped table-bordered table-hover">
   <tbody>
     <% @customers.each do |customer| %>
-      <% if customer %>
       <tr>
         <td><%= link_to customer.name, customer_path(customer) %></td>
         <td><%= link_to 'Surveys', customer_surveys_path(customer) %></td>
@@ -11,12 +10,6 @@
         <td><%= link_to 'Destroy', customer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
       </tr>
-      <% end %>
     <% end %>
   </tbody>
 </table>
-
-<br>
-<% if current_user.admin? %>
-<%= link_to 'New Customer', new_customer_path %>
-<% end %>

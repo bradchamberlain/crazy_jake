@@ -1,25 +1,133 @@
-<%# navigation styled for Bootstrap 3.0 %>
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div style="color:#FFFFFF"><% if @customer %>
-      <%= @customer.name %>
-  <% elsif @survey %>
-      <%= @survey.customer.name %>
-  <% end %>
-  <div class="navbar-text pull-right">
-    <% if user_signed_in? %>
-        Logged in as <strong><%= current_user.email %></strong>.
-        <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+<%
+ if @customer or @survey
+    c = @customer ? @customer : @survey.customer
+ end
+%>
+<style>
+    .navbar-default
+    {
+        background-color: white;
+        border-top-color: white;
+        border-right-color-value: white;
+        border-bottom-color: white;
+        border-left-color-value: white;
+        color: black;
+    }
+</style>
+<table width="100%">
+  <tr>
+    <% if c %>
+      <td width="10px">
+        <%= image_tag c.logo.url(:icon) %>
+      </td>
+      <td>
+        <h4>
+          <%= c.name %>
+        </h4>
+      </td>
     <% end %>
-  </div>
-  </div>
-  <div class="container">
-    <div class="navbar-header" style="color:white">
-      <%= render_breadcrumbs separator: ' / ', class: 'navbar-brand' %>
-    </div>
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <%= render 'layouts/navigation_links' %>
-      </ul>
-    </div>
-  </div>
-</nav>
+    <% if user_signed_in? %>
+      <td>
+        <div class="navbar-text pull-right">
+          Welcome <strong><%= current_user.email %></strong>.
+        </div>
+      </td>
+      <td width="101px">
+        <nav class="navbar-default" role="navigation">
+          <div class="navbar-header">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Settings
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <% if current_user.admin? %>
+                    <li>
+                      <%= link_to "Customers", customers_path, class: "navbar-link" %>
+                    </li>
+                    <li>
+                      <%= link_to "New Customer", new_customer_path, class: "navbar-link" %>
+                    </li>
+                  <% end %>
+                  <% if c %>
+                    <li>
+                      <%= link_to "#{c.name}'s Profile", customer_path(c), class: "navbar-link" %>
+                    </li>
+                    <li>
+                      <%= link_to "Edit #{c.name}'s Profile", edit_customer_path(c), class: "navbar-link" %>
+                    </li>
+                  <% end %>
+                  <li class="divider"></li>
+                  <li>
+                    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: 'navbar-link'  %>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        </td>
+        <% if c %>
+        <td width="100px">
+          <nav class="navbar-default" role="navigation">
+            <div class="navbar-header">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    Surveys
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <%= link_to "All Surveys", customer_surveys_path(c), class: "navbar-link" %>
+                    </li>
+                    <% c.surveys.each do |survey| %>
+                      <li role="presentation" class="dropdown-header">
+                        <%=survey.name%>
+                      </li>
+                      <li>
+                        <%= link_to "View", customer_survey_path(c,survey), class: "navbar-link" %>
+                      </li>
+                      <li>
+                        <%= link_to "Edit", edit_customer_survey_path(c,survey), class: "navbar-link" %>
+                      </li>
+                      <li class="divider"></li>
+                    <% end %>
+                    <li>
+                      <%= link_to "Create new survey", new_customer_survey_path(c), class: "navbar-link" %>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          </td>
+          <td width="100px">
+            <nav class="navbar-default" role="navigation">
+              <div class="navbar-header">
+                <ul class="nav navbar-nav">
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      Reports
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <% c.surveys.each do |survey| %>
+                          <li>
+                            <%= link_to survey.name, customer_survey_reports_path(@customer,survey,format: 'pdf'),target: "_blank" %>
+                          </li>
+                      <% end %>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </td>
+  <% end %>
+        <td width="100px">
+          &nbsp; &nbsp;
+        </td>
+    <% end %>
+  </tr>
+</table>

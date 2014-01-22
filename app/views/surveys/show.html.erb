@@ -3,7 +3,7 @@
   <thead>
     <tr>
       <th colspan="100%">
-            <%= link_to @survey.name, edit_customer_survey_path(@customer, @survey) %>
+        <%= link_to @survey.name, edit_customer_survey_path(@customer, @survey) %>
       </th>
     </tr>
     <tr>
@@ -19,17 +19,17 @@
   <tr>
     <td>
       <div class="divLink">
-        <%= link_to question.index, edit_customer_survey_question_path(@customer,@survey,question)%>
+        <%= question.index %>
       </div>
     </td>
     <td>
       <div class="divLink">
-        <%= link_to question.text, edit_customer_survey_question_path(@customer,@survey,question)%>
+        <%= question.text %>
       </div>
     </td>
     <td>
       <div class="divLink">
-        <%= link_to question.yes_no? ? "Yes/No" : question.rating? ? "Rating" : "Free Form", edit_customer_survey_question_path(@customer, @survey,question) %>
+        <%= question.yes_no? ? "Yes/No" : question.rating? ? "Rating" : "Free Form" %>
       </div>
     </td>
     <td>
@@ -42,6 +42,7 @@
 
     </td>
     <td>
+      <%= link_to 'Edit', edit_customer_survey_question_path(@customer,@survey,question)%> |
       <%= link_to 'Delete', customer_survey_question_path(@customer,@survey,question), method: :delete, data: { confirm: 'Are you sure?' } %>
     </td>
   </tr>
@@ -65,18 +66,33 @@
       </div>
     </td>
   </tr>
-  </tbody>
-</table>
-</div>
-<div class="category">
+  <tr>
+    <td>
   QR code for this survey:
-  <a href="<%=complete_surveys_path(survey_id: @survey.id)%>" target="_blank">
-    <image src="<%=qr_codes_url(survey_id: @survey.id, format: :jpeg)%>" width="100px" />
-  </a>
+    </td>
+    <td>
+      <% if @qr %>
+        <table cellpadding=0 cellspacing=0>
+          <% @qr.modules.each_index do |x| %>
+            <tr>
+              <% @qr.modules.each_index do |y| %>
+                <% if @qr.dark?(x,y) %>
+                  <td class="black" style="background-color: black;height:2px; width:2px;"/>
+                <% else %>
+                  <td class="white" style="background-color: white;height:2px;width:2px;"/>
+                <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 </div>
 <div class="category">
   Links (Open in new window):<br /> &nbsp; &nbsp;
   <%= link_to "View Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%> |
-  <%= link_to "View Survey Report", customer_survey_reports_path(@customer,@survey,format: 'pdf'),target: "_blank" %> |
   <%= link_to "View Printable Card", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>(first 4 questions only)
 </div>

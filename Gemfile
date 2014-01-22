@@ -44,6 +44,8 @@ gem 'bootstrap-sass'
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 
+gem "paperclip", "~> 3.0"
+
 group :development do
   gem 'rails_layout'
 end

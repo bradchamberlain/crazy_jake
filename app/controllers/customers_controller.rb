@@ -7,7 +7,11 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = current_user.admin? ? Customer.all : [current_user.customer]
+    if current_user.admin?
+      @customers = Customer.all
+    else
+      redirect_to customer_path(current_user.customer)
+    end
   end
 
   # GET /customers/1
@@ -72,7 +76,7 @@ class CustomersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def customer_params
-      params.require(:customer).permit(:name)
+      params.require(:customer).permit(:name, :logo)
     end
 
     def customer_bread_crumb
