@@ -19,6 +19,7 @@ CrazyJake::Application.routes.draw do
           get 'up'
         end
       end
+      resources :reporting_fields
     end
   end
 

@@ -2,8 +2,6 @@ class SurveysController < ApplicationController
   before_action :authenticate_user!
   before_action :set_survey, only: [:show, :edit, :update, :destroy, :card]
   before_filter :set_customer
-  before_filter :survey_bread_crumb, only: [:show, :edit, :update]
-  before_filter :surveys_bread_crumb, only: [:index, :new, :create]
   require 'rqrcode'
 
   # GET /surveys
@@ -15,6 +13,7 @@ class SurveysController < ApplicationController
   # GET /surveys/1
   # GET /surveys/1.json
   def show
+    binding.pry
     rqrcode
   end
 
@@ -70,6 +69,7 @@ class SurveysController < ApplicationController
 
   def card
     rqrcode
+    @reporting_fields = params.select{|k,v| k.match /^c_/}
     respond_to do |format|
       format.html
       format.pdf do
@@ -104,15 +104,5 @@ class SurveysController < ApplicationController
 
     def set_customer
       @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
-    end
-
-    def surveys_bread_crumb
-      add_breadcrumb 'Customers', customers_path if current_user.admin?
-      add_breadcrumb @customer.name, customer_path(@customer)
-    end
-
-    def survey_bread_crumb
-      surveys_bread_crumb
-      add_breadcrumb @survey.name, customer_survey_path(@customer, @survey)
     end
 end

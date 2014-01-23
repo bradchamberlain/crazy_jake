@@ -72,18 +72,33 @@
       </table>
       <p />
       <table cellpadding=0 cellspacing=0>
-        <% @qr.modules.each_index do |x| -%>
+        <% @qr.modules.each_index do |x| %>
             <tr>
-              <% @qr.modules.each_index do |y| -%>
-                  <% if @qr.dark?(x,y) -%>
+              <% @qr.modules.each_index do |y| %>
+                  <% if @qr.dark?(x,y) %>
                       <td class="black" style="background-color: black;height:2px; width:2px;"/>
                   <% else -%>
                       <td class="white" style="background-color: white;height:2px;width:2px;"/>
-                  <% end -%>
-              <% end -%>
+                  <% end %>
+              <% end %>
             </tr>
-        <% end -%>
+        <% end %>
       </table>
+        <% if @reporting_fields %>
+          <p />
+          <table style="background-color: #f3f3f3">
+            <% @reporting_fields.each do |k,v| %>
+            <tr>
+              <td style="font-size: 8px;">
+                <%=k[2,1000]%>:
+              </td>
+              <td style="font-size: 8px;">
+                <%=v%>
+              </td>
+            </tr>
+            <% end %>
+          </table>
+      <% end %>
     </td>
   </tr>
   <tr>

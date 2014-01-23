@@ -1,0 +1,31 @@
+<h1>Reporting fields for <%=@survey.name%></h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Field Title</th>
+      <th>Allowed Values</th>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+  <% @survey.reporting_fields.each do |reporting_field| %>
+    <tr>
+      <td><%=reporting_field.field_title%></td>
+      <td>
+        <%reporting_field.field_values.strip.split(/[\r\n]+/).each do |v| %>
+          <%= v %><br />
+        <% end %>
+      </td>
+      <td>
+        <%= link_to "Edit", edit_customer_survey_reporting_field_path(@customer,@survey,reporting_field) %> |
+        <%= link_to 'Delete', customer_survey_reporting_field_path(@customer,@survey,reporting_field), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan="100%"><%= link_to "New Reporting Field", new_customer_survey_reporting_field_path %></td>
+  </tr>
+  </tbody>
+
+</table>

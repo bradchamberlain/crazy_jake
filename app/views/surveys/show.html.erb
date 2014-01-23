@@ -66,33 +66,60 @@
       </div>
     </td>
   </tr>
-  <tr>
-    <td>
-  QR code for this survey:
-    </td>
-    <td>
-      <% if @qr %>
-        <table cellpadding=0 cellspacing=0 style="border: 2px solid white ">
-          <% @qr.modules.each_index do |x| %>
-            <tr>
-              <% @qr.modules.each_index do |y| %>
-                <% if @qr.dark?(x,y) %>
-                  <td class="black" style="background-color: black;height:2px; width:2px;"/>
-                <% else %>
-                  <td class="white" style="background-color: white;height:2px;width:2px;"/>
-                <% end %>
-              <% end %>
-            </tr>
-          <% end %>
-        </table>
-      <% end %>
-    </td>
-  </tr>
+  <!--<tr>-->
+    <!--<td>-->
+  <!--QR code for this survey:-->
+    <!--</td>-->
+    <!--<td>-->
+      <!--<% if @qr %>-->
+        <!--<table cellpadding=0 cellspacing=0 style="border: 2px solid white ">-->
+          <!--<% @qr.modules.each_index do |x| %>-->
+            <!--<tr>-->
+              <!--<% @qr.modules.each_index do |y| %>-->
+                <!--<% if @qr.dark?(x,y) %>-->
+                  <!--<td class="black" style="background-color: black;height:2px; width:2px;"/>-->
+                <!--<% else %>-->
+                  <!--<td class="white" style="background-color: white;height:2px;width:2px;"/>-->
+                <!--<% end %>-->
+              <!--<% end %>-->
+            <!--</tr>-->
+          <!--<% end %>-->
+        <!--</table>-->
+      <!--<% end %>-->
+    <!--</td>-->
+  <!--</tr>-->
   </tbody>
+  </table>
+</div>
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <thead>
+    <tr>
+      <th colspan="100%">View and Print Survey Cards</th>
+    </tr>
+    <tr>
+      <td colspan="100%"><div style="font-size: small">(first 4 questions only)</div></td>
+    </tr>
+    </thead>
+    <tbody>
+    <% @survey.reporting_fields.each do |reporting_field| %>
+      <tr>
+        <td width="100px"></td>
+        <td><%=reporting_field.field_title %></td>
+        <td>
+          <table>
+            <% reporting_field.field_values.strip.split(/[\r\n]+/).each do |value| %>
+              <tr><td><%= link_to value, card_customer_survey_path(@customer, @survey, format: 'pdf', "c_" + reporting_field.field_title => value), target: "_blank" %></td></tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
   </table>
 </div>
 <div class="category">
   Links (Open in new window):<br /> &nbsp; &nbsp;
   <%= link_to "View Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%> |
-  <%= link_to "View Printable Card", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>(first 4 questions only)
+  <%= link_to "View Printable Card ", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>(No reporting fields)
 </div>

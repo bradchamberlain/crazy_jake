@@ -1,8 +1,6 @@
 class CustomersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
-  before_filter :customers_bread_crumb, only: [:index, :new, :create]
-  before_filter :customer_bread_crumb, only: [:show, :edit, :update]
 
   # GET /customers
   # GET /customers.json
@@ -79,14 +77,4 @@ class CustomersController < ApplicationController
       params.require(:customer).permit(:name, :logo, :menu_text_color, :menu_bg_color, :body_text_color, :body_bg_color)
     end
 
-    def customer_bread_crumb
-      customers_bread_crumb
-      add_breadcrumb @customer.name, customer_path(@customer), class: "bread_crumb"
-    end
-
-    def customers_bread_crumb
-      if current_user.admin?
-        add_breadcrumb "Customers", customers_path, class: "bread_crumb"
-      end
-    end
 end

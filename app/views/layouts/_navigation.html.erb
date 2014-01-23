@@ -96,6 +96,9 @@
                       <li>
                         <%= link_to "Edit", edit_customer_survey_path(c,survey), class: "navbar-link", style: style_str %>
                       </li>
+                      <li>
+                        <%= link_to "Reporting Fields", customer_survey_reporting_fields_path(c,survey), class: "navbar-link", style: style_str %>
+                      </li>
                       <li class="divider"></li>
                     <% end %>
                     <li>
@@ -130,5 +133,6 @@
           </td>
         <% end %>
       <% end %>
+    <td width="100px">&nbsp;</td>
   </tr>
 </table>
