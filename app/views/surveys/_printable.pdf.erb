@@ -1,7 +1,7 @@
 <table style="width:6in;height:4.5in;border:1px gray dotted">
   <tr>
     <th colspan='100%'>
-      <% if @customer.logo %>
+      <% if @customer.logo? %>
         <%=wicked_pdf_image_tag @customer.logo.url(:icon), style: "position:relative; left:-80px;" %>
       <% end %>
       <span style="position: relative; left:-50px;top:-15px; font-size: 40;">

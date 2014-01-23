@@ -2,32 +2,27 @@
  if @customer or @survey
     c = @customer ? @customer : @survey.customer
  end
- style_str = "background-color:#{c.present? ?  c.menu_bg_color : 'white'};color:#{c.present? ? c.menu_text_color :  'black'}"
+ style_str = "background-color:#{c.present? and c.menu_bg_color.present? ?  c.menu_bg_color : '#000000'};color:#{c.present? and c.menu_text_color.present? ? c.menu_text_color :  '#FFFFFF'};"
 %>
 <style>
   .navbar-link
   {
-      background-color:<%= c.present? ?  c.menu_bg_color : 'white' %>;
-      color:<%= c.present? ? c.menu_text_color :  'black' %>;
+      background-color:<%= (c.present? and c.menu_bg_color.present?) ?  c.menu_bg_color : '#000000' %>;
+      color:<%= (c.present? and c.menu_text_color.present?) ? c.menu_text_color :  '#FFFFFF' %>;
   }
-  /*a:visited*/
-  /*{*/
-    /*background-color:<%= c.present? ?  c.menu_bg_color : 'white' %>;*/
-    /*color:<%= c.present? ? c.menu_text_color :  'black' %>;*/
-  /*}*/
 
   body, table, a,a:visited, a:active, main{
-      background-color: <%=c.present? ? c.body_bg_color : 'white' %>;
-      color: <%= c.present? ? c.body_text_color : 'black' %>;
+      background-color: <%=c.present? and c.body_bg_color.present? ? c.body_bg_color : 'white' %>;
+      color: <%= c.present? and c.body_text_color.present? ? c.body_text_color : 'black' %>;
   }
-
-
 </style>
 <table width="100%" style="<%=style_str%>">
   <tr>
     <% if c %>
       <td width="10px">
-        <%= image_tag c.logo.url(:icon) %>
+        <% if c.logo? %>
+          <%= image_tag c.logo.url(:icon) %>
+        <% end %>
       </td>
       <td>
         <h4>
@@ -133,10 +128,7 @@
               </div>
             </nav>
           </td>
-  <% end %>
-        <td width="100px">
-          &nbsp; &nbsp;
-        </td>
-    <% end %>
+        <% end %>
+      <% end %>
   </tr>
 </table>
