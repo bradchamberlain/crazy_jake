@@ -2,8 +2,6 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question, only: [:show, :edit, :update, :destroy, :down, :up]
   before_filter :set_survey
-  before_filter :questions_bread_crumb, only: [:index, :new, :create]
-  before_filter :question_bread_crumb, only: [:show, :edit, :update]
 
   # GET /questions
   # GET /questions.json
@@ -123,17 +121,6 @@ class QuestionsController < ApplicationController
     def survey_index
       Question.where(survey_id: @survey.id).size + 1
     end
-
-  def questions_bread_crumb
-    add_breadcrumb "Customers", customers_path if current_user.admin?
-    add_breadcrumb @customer.name, customer_path(@customer)
-    add_breadcrumb @survey.name, customer_survey_path(@customer, @survey)
-  end
-
-  def question_bread_crumb
-    questions_bread_crumb
-    add_breadcrumb @question.text, edit_customer_survey_question_path(@customer, @survey, @question)
-  end
 
   def update_indicies index
     @survey.questions.each do |question|

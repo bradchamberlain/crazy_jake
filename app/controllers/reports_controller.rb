@@ -1,7 +1,6 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
   before_filter :build_reports
-  before_filter :bread_crumb
 
   require 'open-uri'
 
@@ -58,12 +57,6 @@ class ReportsController < ApplicationController
     @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     @survey = Survey.find(params[:survey_id])
     raise unless @survey.customer == @customer
-  end
-
-  def bread_crumb
-    add_breadcrumb @customer.name, customer_path(@customer), class: "bread_crumb"
-    add_breadcrumb @survey.name, customer_survey_path(@customer, @survey), class: "bread_crumb"
-    add_breadcrumb "Report", customer_survey_reports_path(@customer,@survey), class: "bread_crumb"
   end
 
 end

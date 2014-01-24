@@ -1,0 +1,25 @@
+<%= form_for [@customer, @survey, @reporting_field] do |f| %>
+    <% if @reporting_field.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@reporting_field.errors.count, "error") %> prohibited this survey from being saved:</h2>
+
+          <ul>
+            <% @reporting_field.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :field_title %><br />
+      <%= f.text_field :field_title %>
+    </div>
+    <div class="field">
+      <%= label :field_values, "Allowed values (Put each value on a new line)" %><br />
+      <%= f.text_area :field_values %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
