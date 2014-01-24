@@ -19,7 +19,7 @@ CrazyJake::Application.routes.draw do
           get 'up'
         end
       end
-      resources :reporting_fields
+      resources :reporting_fields, except: [:show]
     end
   end
 

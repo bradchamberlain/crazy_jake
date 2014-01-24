@@ -6,9 +6,6 @@ class ReportingFieldsController < ApplicationController
   def index
   end
 
-  def show
-  end
-
   def new
     @reporting_field = ReportingField.new
   end

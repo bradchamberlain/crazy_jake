@@ -24,6 +24,7 @@ describe SurveysController do
   # Survey. As you add validations to Survey, be sure to
   # adjust the attributes here as well.
   let(:customer) { FactoryGirl.create(:customer)}
+  let(:reporting_field) {FactoryGirl.build(:reporting_field)}
 
   let(:valid_attributes) { { "name" => "MyText", "customer_id" => customer.id } }
 
@@ -51,8 +52,11 @@ describe SurveysController do
   describe "GET show" do
     it "assigns the requested survey as @survey" do
       survey = Survey.create! valid_attributes
+      reporting_field.survey = survey
+      reporting_field.save!
       get :show, {customer_id: customer.id, :id => survey.to_param}, valid_session
       assigns(:survey).should eq(survey)
+      reporting_field.destroy
     end
   end
 

@@ -102,6 +102,7 @@
     </tr>
     </thead>
     <tbody>
+    <% if @reporting_fields %>
     <% @reporting_fields.each do |rf| %>
       <tr>
         <td></td>
@@ -113,6 +114,7 @@
             <%= link_to p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\"c_>]/,""), card_customer_survey_path(@customer, @survey, p), target: "_blank" %>
           </td>
       </tr>
+    <% end %>
     <% end %>
     <tr>
       <td></td>
