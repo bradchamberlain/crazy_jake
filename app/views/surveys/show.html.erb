@@ -95,31 +95,35 @@
   <table class="table table-bordered table-condensed">
     <thead>
     <tr>
-      <th colspan="100%">View and Print Survey Cards</th>
-    </tr>
-    <tr>
-      <td colspan="100%"><div style="font-size: small">(first 4 questions only)</div></td>
+      <td colspan="100%">
+        <div style="font-weight: bold">View and Print Survey Cards</div>
+        <div style="font-size: small">Print surveys are first 4 questions only. Links open new window.</div>
+      </td>
     </tr>
     </thead>
     <tbody>
-    <% @survey.reporting_fields.each do |reporting_field| %>
+    <% @reporting_fields.each do |rf| %>
       <tr>
-        <td width="100px"></td>
-        <td><%=reporting_field.field_title %></td>
-        <td>
-          <table>
-            <% reporting_field.field_values.strip.split(/[\r\n]+/).each do |value| %>
-              <tr><td><%= link_to value, card_customer_survey_path(@customer, @survey, format: 'pdf', "c_" + reporting_field.field_title => value), target: "_blank" %></td></tr>
-            <% end %>
-          </table>
-        </td>
+        <td></td>
+          <td>
+            <% p = {format: 'pdf'}
+               rf.each do |f|
+                 p = p.merge(f)
+               end %>
+            <%= link_to p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\"c_>]/,""), card_customer_survey_path(@customer, @survey, p), target: "_blank" %>
+          </td>
       </tr>
     <% end %>
+    <tr>
+      <td></td>
+      <td>
+        <%= link_to "No Reporting Fields", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><%= link_to "View Web Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%></td>
+    </tr>
     </tbody>
   </table>
-</div>
-<div class="category">
-  Links (Open in new window):<br /> &nbsp; &nbsp;
-  <%= link_to "View Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%> |
-  <%= link_to "View Printable Card ", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>(No reporting fields)
 </div>

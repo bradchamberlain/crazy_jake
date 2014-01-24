@@ -13,7 +13,17 @@ class SurveysController < ApplicationController
   # GET /surveys/1
   # GET /surveys/1.json
   def show
-    binding.pry
+    a = [[]]
+    @survey.reporting_fields.each_with_index do |r,i|
+      b = Array.new
+      x = r.field_values.strip.split(/[\r\n]+/)
+      x.each_with_index do |s,j|
+        b[j] = {"c_" + r.field_title => s}
+      end
+      a[i] = b
+    end
+    head, *rest = a
+    @reporting_fields = head.product(*rest)
     rqrcode
   end
 
@@ -105,4 +115,5 @@ class SurveysController < ApplicationController
     def set_customer
       @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     end
+
 end
