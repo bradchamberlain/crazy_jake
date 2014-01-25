@@ -12,17 +12,35 @@
     <% end %>
 
     <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
       <%= f.label :email %><br />
       <%= f.text_field :email %>
     </div>
     <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password %>
+    </div>
+    <% if @admin %>
+    <div class="field">
       <%= f.label :customer_id %><br />
       <%= f.select :customer_id, Customer.all.map{ |c| [c.name, c.id] }, {include_blank: 'None'} %>
     </div>
-    <div class="field">
-      <%= f.label :admin %><br />
-      <%= f.check_box :admin %>
-    </div>
+    <% end %>
+    <% if @admin %>
+      <div class="field">
+        <%= f.label :admin %><br />
+        <%= f.check_box :admin %>
+      </div>
+    <% end %>
+    <% if @editable and @user != current_user %>
+      <div class="field">
+        <%= f.label :master_user %><br />
+        <%= f.check_box :master_user %>
+      </div>
+    <% end %>
     <div class="actions">
       <%= f.submit %>
     </div>

@@ -2,11 +2,16 @@ require 'spec_helper'
 
 describe ReportsController do
   let(:survey) { FactoryGirl.create(:survey) }
+  let(:customer) { FactoryGirl.create(:customer)}
   let(:valid_attributes) { { "text" => "MyText", "survey_id" => survey.id, index: 1, "yes_no" => true } }
   let(:valid_attributes2) { { "text" => "MyText2", "survey_id" => survey.id, index: 2, "rating" => true } }
   let(:valid_attributes3) { { "text" => "MyText3", "survey_id" => survey.id, index: 3, "free_form" => true } }
 
   before :each do
+    Survey.destroy_all
+    Customer.destroy_all
+    survey.customer = customer
+    survey.save
     user = FactoryGirl.create(:user)
     sign_in user
   end
@@ -32,6 +37,10 @@ describe ReportsController do
       response.should be_success
     end
 
+  end
+
+  after :each do
+    Survey.destroy_all
   end
 
 end

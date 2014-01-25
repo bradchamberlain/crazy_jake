@@ -1,6 +1,8 @@
 <%
  if @customer or @survey
     c = @customer ? @customer : @survey.customer
+ elsif current_user and current_user.customer and current_user.customer.present?
+   c = current_user.customer
  end
  style_str = "background-color:#{c.present? and c.menu_bg_color.present? ?  c.menu_bg_color : '#000000'};color:#{c.present? and c.menu_text_color.present? ? c.menu_text_color :  '#FFFFFF'};"
 %>
@@ -33,46 +35,69 @@
     <% if user_signed_in? %>
       <td>
         <div class="navbar-text pull-right">
-          Welcome <strong><%= current_user.email %></strong>.
+          Welcome <strong><%= current_user.name.present? ? current_user.name : current_user.email %></strong>.
         </div>
       </td>
+
+
+        <td width="101px">
+          <nav class="navbar-default" role="navigation">
+            <div class="navbar-header">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" data-toggle="dropdown" style="<%=style_str%>">
+                    User
+                    <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% if current_user.admin? %>
+                        <li style="<%=style_str%>">
+                          <%= link_to "Customers", customers_path, class: "navbar-link", style: style_str %>
+                        </li>
+                        <li>
+                          <%= link_to "New Customer", new_customer_path, class: "navbar-link", style: style_str %>
+                        </li>
+                    <% end %>
+                    <li class="divider"></li>
+                    <li style="<%=style_str%>">
+                      <%= link_to 'User Information', users_path, class: "navbar-link", style: style_str %>
+                    </li>
+                    <li>
+                      <%= link_to "Logout", destroy_user_session_path, method: :delete, class: 'navbar-link', style: style_str  %>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </td>
+
+
+      <% if c %>
       <td width="101px">
         <nav class="navbar-default" role="navigation">
           <div class="navbar-header">
             <ul class="nav navbar-nav">
               <li class="dropdown">
                 <a href="#" data-toggle="dropdown" style="<%=style_str%>">
-                  Settings
+                  Set up
                   <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <% if current_user.admin? %>
-                    <li style="<%=style_str%>">
-                      <%= link_to "Customers", customers_path, class: "navbar-link", style: style_str %>
-                    </li>
-                    <li>
-                      <%= link_to "New Customer", new_customer_path, class: "navbar-link", style: style_str %>
-                    </li>
-                  <% end %>
-                  <% if c %>
                     <li>
                       <%= link_to "#{c.name}'s Profile", customer_path(c), class: "navbar-link", style: style_str %>
                     </li>
-                    <li>
-                      <%= link_to "Edit #{c.name}'s Profile", edit_customer_path(c), class: "navbar-link", style: style_str %>
-                    </li>
-                  <% end %>
-                  <li class="divider"></li>
-                  <li>
-                    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: 'navbar-link', style: style_str  %>
-                  </li>
+                    <% if current_user.admin? or current_user.master_user? %>
+                      <li>
+                        <%= link_to "Edit #{c.name}'s Profile", edit_customer_path(c), class: "navbar-link", style: style_str %>
+                      </li>
+                    <% end %>
                 </ul>
               </li>
             </ul>
           </div>
         </nav>
         </td>
-        <% if c %>
         <td width="100px">
           <nav class="navbar-default" role="navigation">
             <div class="navbar-header">
@@ -93,17 +118,21 @@
                       <li>
                         <%= link_to "View", customer_survey_path(c,survey), class: "navbar-link", style: style_str %>
                       </li>
+                      <% if current_user.admin? or current_user.master_user? %>
                       <li>
                         <%= link_to "Edit", edit_customer_survey_path(c,survey), class: "navbar-link", style: style_str %>
                       </li>
                       <li>
                         <%= link_to "Reporting Fields", customer_survey_reporting_fields_path(c,survey), class: "navbar-link", style: style_str %>
                       </li>
+                      <% end %>
                       <li class="divider"></li>
                     <% end %>
-                    <li>
-                      <%= link_to "Create new survey", new_customer_survey_path(c), class: "navbar-link", style: style_str %>
-                    </li>
+                    <% if current_user.admin? or current_user.master_user? %>
+                      <li>
+                        <%= link_to "Create new survey", new_customer_survey_path(c), class: "navbar-link", style: style_str %>
+                      </li>
+                    <% end %>
                   </ul>
                 </li>
               </ul>

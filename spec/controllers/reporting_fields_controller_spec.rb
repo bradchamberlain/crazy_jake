@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ReportingFieldsController do
 
   let(:survey) { FactoryGirl.create(:survey)}
+  let(:customer) { FactoryGirl.create(:customer)}
 
   let(:valid_attributes) { { "field_title" => "MyText", "field_values" => "values", "survey_id" => survey.id } }
 
@@ -10,15 +11,18 @@ describe ReportingFieldsController do
 
   before :each do
     ReportingField.destroy_all
+    Survey.destroy_all
+    Customer.destroy_all
+    survey.customer = customer
+    survey.save
     user = FactoryGirl.create(:user)
     sign_in user
   end
 
-
   describe "GET index" do
     it "assigns all ReportingField as @ReportingField" do
       reporting_field = ReportingField.create! valid_attributes
-      get :index, {customer_id: survey.customer.id, survey_id: survey.id}, valid_session
+      get :index, {customer_id: customer.id, survey_id: survey.id}, valid_session
       response.should be_success
     end
   end
@@ -43,7 +47,7 @@ describe ReportingFieldsController do
       it "creates a new Reporting Field" do
         expect {
           post :create, {customer_id: survey.customer.id, survey_id: survey, :reporting_field => valid_attributes}, valid_session
-        }.to change(Survey, :count).by(1)
+        }.to change(ReportingField, :count).by(1)
       end
 
       it "assigns a newly created reporting field as @reporting_field" do

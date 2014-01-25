@@ -24,6 +24,7 @@ describe QuestionsController do
   # Question. As you add validations to Question, be sure to
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
+  let(:customer) { FactoryGirl.create(:customer)}
   let(:valid_attributes) { { "text" => "MyText", "survey_id" => survey.id, index: 1, "yes_no" => true } }
   let(:valid_attributes2) { { "text" => "MyText2", "survey_id" => survey.id, index: 2, "rating" => true } }
   let(:valid_attributes3) { { "text" => "MyText3", "survey_id" => survey.id, index: 3, "free_form" => true } }
@@ -35,8 +36,17 @@ describe QuestionsController do
   let(:valid_session) { {} }
 
   before :each do
+    Survey.destroy_all
+    Customer.destroy_all
+    survey.customer = customer
+    survey.save
     user = FactoryGirl.create(:user)
     sign_in user
+  end
+
+  after :each do
+    Survey.destroy_all
+    Question.destroy_all
   end
 
   describe "GET index" do

@@ -1,20 +1,24 @@
 <table class="table">
   <thead>
   <tr>
+    <th>Name</th>
     <th>Email</th>
     <th>Sign In Count</th>
-    <th>Administrator</th>
-    <th>Customer</th>
+    <% if @admin %><th>Administrator</th><% end %>
+    <th>Master User</th>
+    <th colspan="2">Customer</th>
   </tr>
   </thead>
 <% @users.try(:each) do |user| %>
   <tr>
-    <td><%= link_to user.email, edit_user_path(user) %></td>
-    <td><%= link_to user.sign_in_count, edit_user_path(user) %></td>
-    <td><%= link_to user.admin.to_s, edit_user_path(user) %></td>
-    <td><%= link_to user.customer.name, customer_path(user.customer) if user.customer%></td>
-    <td><%= link_to 'Delete', user_path(user), method: :delete if current_user.admin? and current_user != user %></td>
+    <td><%= @editable ? (link_to user.name, edit_user_path(user)) : user.name %></td>
+    <td><%= @editable ? (link_to user.email, edit_user_path(user)) : user.email %></td>
+    <td><%= @editable ? (link_to user.sign_in_count, edit_user_path(user)) : user.sign_in_count %></td>
+    <% if @admin %><td><%= link_to user.admin.to_s, edit_user_path(user) %></td><% end %>
+    <td><%= @editable ? (link_to user.master_user.to_s, edit_user_path(user)) : user.master_user %></td>
+    <td><%= (@editable ? (link_to user.customer.name, customer_path(user.customer)) : user.customer.name) if user.customer%></td>
+    <td><%= link_to 'Delete', user_path(user), method: :delete, data: { confirm: 'Are you sure?' } if @editable and current_user != user %></td>
   </tr>
 <% end %>
 </table>
-<%= link_to 'New User', new_user_path if current_user.admin? %>
+<%= link_to 'New User', new_user_path if @editable %>
