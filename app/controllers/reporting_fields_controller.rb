@@ -16,7 +16,6 @@ class ReportingFieldsController < ApplicationController
   def create
     @reporting_field = ReportingField.new(reporting_field_params)
     @reporting_field.survey = @survey
-
     respond_to do |format|
       if @reporting_field.save
         format.html { redirect_to customer_survey_reporting_fields_path(@customer,@survey), notice: "#{@reporting_field.field_title} was successfully created." }

@@ -1,13 +1,10 @@
 <h1>Listing surveys</h1>
 
-<table class="table table-bordered">
+<table class="table">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Number of questions</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th colspan="2">Number of questions</th>
     </tr>
   </thead>
 
@@ -16,7 +13,7 @@
       <tr>
         <td><%= link_to survey.name, customer_survey_path(@customer, survey) %></td>
         <td><%= survey.questions.size %></td>
-        <td><%= link_to 'Delete', customer_survey_path(@customer,survey), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Delete', customer_survey_path(@customer,survey), method: :delete, data: { confirm: 'Are you sure?' } if @editable%></td>
       </tr>
     <% end %>
   </tbody>

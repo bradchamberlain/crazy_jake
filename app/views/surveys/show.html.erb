@@ -3,15 +3,17 @@
   <thead>
     <tr>
       <th colspan="100%">
-        <%= link_to @survey.name, edit_customer_survey_path(@customer, @survey) %>
+        <%= @editable ? (link_to @survey.name, edit_customer_survey_path(@customer, @survey)) : @survey.name %>
       </th>
     </tr>
     <tr>
       <th>Order</th>
       <th>Text</th>
       <th>Question Type</th>
+      <% if current_user.admin? or current_user.master_user? %>
       <th>Move Up/Down</th>
       <th></th>
+      <% end %>
     </tr>
   </thead>
   <tbody>
@@ -32,6 +34,7 @@
         <%= question.yes_no? ? "Yes/No" : question.rating? ? "Rating" : "Free Form" %>
       </div>
     </td>
+    <% if current_user.admin? or current_user.master_user? %>
     <td>
       <% if question.index > 1 %>
         <%= link_to '&uarr;'.html_safe, up_customer_survey_question_path(@customer,@survey,question) %>
@@ -45,49 +48,30 @@
       <%= link_to 'Edit', edit_customer_survey_question_path(@customer,@survey,question)%> |
       <%= link_to 'Delete', customer_survey_question_path(@customer,@survey,question), method: :delete, data: { confirm: 'Are you sure?' } %>
     </td>
+    <%end%>
   </tr>
   <% end %>
+  <% if @editable %>
   <tr>
     <td colspan="100%">
       <%= link_to 'New Question', new_customer_survey_question_path(@customer, @survey) %>
     </td>
   </tr>
+  <% end %>
   <tr>
     <td>
       <div class="divLink">
-        <%= link_to "Completed Message:", edit_customer_survey_path(@customer, @survey) %>
+        <%= @editable ? (link_to "Completed Message:", edit_customer_survey_path(@customer, @survey)) : "Completed Message" %>
       </div>
     </td>
     <td>
       <div class="divLink">
       <pre>
-<%= link_to @survey.complete_message, edit_customer_survey_path(@customer, @survey) %>
+<%= @editable ? (link_to @survey.complete_message, edit_customer_survey_path(@customer, @survey)) : @survey.complete_message %>
       </pre>
       </div>
     </td>
   </tr>
-  <!--<tr>-->
-    <!--<td>-->
-  <!--QR code for this survey:-->
-    <!--</td>-->
-    <!--<td>-->
-      <!--<% if @qr %>-->
-        <!--<table cellpadding=0 cellspacing=0 style="border: 2px solid white ">-->
-          <!--<% @qr.modules.each_index do |x| %>-->
-            <!--<tr>-->
-              <!--<% @qr.modules.each_index do |y| %>-->
-                <!--<% if @qr.dark?(x,y) %>-->
-                  <!--<td class="black" style="background-color: black;height:2px; width:2px;"/>-->
-                <!--<% else %>-->
-                  <!--<td class="white" style="background-color: white;height:2px;width:2px;"/>-->
-                <!--<% end %>-->
-              <!--<% end %>-->
-            <!--</tr>-->
-          <!--<% end %>-->
-        <!--</table>-->
-      <!--<% end %>-->
-    <!--</td>-->
-  <!--</tr>-->
   </tbody>
   </table>
 </div>

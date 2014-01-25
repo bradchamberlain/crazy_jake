@@ -1,5 +1,8 @@
 require 'spec_helper'
 
 describe ReportingField do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it {should validate_presence_of :survey_id}
+  it {should validate_presence_of :field_title}
+  it {should validate_uniqueness_of :field_title}
+  it {should validate_presence_of :field_values}
 end

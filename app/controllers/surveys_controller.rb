@@ -2,6 +2,7 @@ class SurveysController < ApplicationController
   before_action :authenticate_user!
   before_action :set_survey, only: [:show, :edit, :update, :destroy, :card]
   before_filter :set_customer
+  before_filter :set_admin
   require 'rqrcode'
 
   # GET /surveys
@@ -13,17 +14,7 @@ class SurveysController < ApplicationController
   # GET /surveys/1
   # GET /surveys/1.json
   def show
-    a = [[]]
-    @survey.reporting_fields.each_with_index do |r,i|
-      b = Array.new
-      x = r.field_values.strip.split(/[\r\n]+/)
-      x.each_with_index do |s,j|
-        b[j] = {"c_" + r.field_title => s}
-      end
-      a[i] = b
-    end
-    head, *rest = a
-    @reporting_fields = head.product(*rest)
+    setup_reporting_fields
     rqrcode
   end
 
@@ -91,6 +82,21 @@ class SurveysController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+
+    def setup_reporting_fields
+      first_array, *rest = build_values_array
+      @reporting_fields = first_array.product(*rest) if first_array
+    end
+
+    def build_values_array
+      array_holder = Array.new
+      @survey.reporting_fields.each do |reporting_field,reporting|
+        iteration_array = Array.new
+        reporting_field.field_values_array.each_with_index {|value,value_index| iteration_array[value_index] = {"c_" + reporting_field.field_title => value} }
+        array_holder << iteration_array
+      end
+      array_holder
+    end
 
     def rqrcode
       @qr = RQRCode::QRCode.new(qr_survey_path,:size => 8)
