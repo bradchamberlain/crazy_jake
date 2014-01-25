@@ -16,6 +16,9 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
+    <% if @customer.logo.file? %>
+        <div style="position: absolute; left:200px;"><%= image_tag(@customer.logo.url(:icon)) %></div>
+    <% end %>
     <%= f.label :logo %><br />
     <%= f.file_field :logo %>
   </div>

@@ -1,32 +1,40 @@
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-    // Load the Visualization API and the piechart package.
-    google.load('visualization', '1.0', {'packages':['corechart']});
-</script>
-<table width="600px">
-  <tr>
-    <td><h1><%=@survey.name.titleize%></h1></td>
-    <td style="text-align: right"><h4><small><%=Date.today.strftime("%B %-d, %Y")%></small></h4></td>
-  </tr>
-</table>
+<style>
 
-<table class="table table-striped table-bordered table-hover" style="width:600px;">
-  <tbody>
-  <% @survey.questions.order(:index).each do |question| %>
-      <% if question.rating? or question.yes_no? %>
-          <%= render 'chart', question: question %>
-      <% else %>
-          <%= render 'responses', question: question %>
-      <% end %>
-  <% end %>
-  </tbody>
-  <tfoot>
+</style>
+<table class="table">
+  <thead>
   <tr>
+    <th>
+      Report Option
+    </th>
     <th colspan="100%">
-      <div class="pull-right">
-        Total Responses: <%=@complete_surveys.size%>
-      </div>
+      Output Option
     </th>
   </tr>
-  </tfoot>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      All Responses Report
+    </td>
+    <td>
+      <%= link_to "Web", reporting_fields_customer_survey_report_path(@customer, @survey, 1), target: "_blank" %>
+        |
+      <%= link_to "PDF", reporting_fields_customer_survey_report_path(@customer, @survey, 1, format: :pdf), target: "_blank" %>
+    </td>
+  </tr>
+  <% @reporting_fields.each do |reporting_field| %>
+  <tr>
+    <td>
+      <%= reporting_field[0].match /[^c_].*/ %> = <%=reporting_field[1] %>
+    </td>
+    <td>
+      <%= link_to "Web", reporting_fields_customer_survey_report_path(@customer, @survey, 2, reporting_field[0] => reporting_field[1]), target: "_blank" %>
+        |
+      <%= link_to "PDF", reporting_fields_customer_survey_report_path(@customer, @survey, 2, reporting_field[0] => reporting_field[1], format: :pdf), target: "_blank" %>
+    </td>
+  </tr>
+  <% end %>
+  </tbody>
 </table>
+

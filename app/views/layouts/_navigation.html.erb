@@ -4,6 +4,7 @@
  elsif current_user and current_user.customer and current_user.customer.present?
    c = current_user.customer
  end
+ c = nil unless c == nil or c.persisted?
  style_str = "background-color:#{c.present? and c.menu_bg_color.present? ?  c.menu_bg_color : '#000000'};color:#{c.present? and c.menu_text_color.present? ? c.menu_text_color :  '#FFFFFF'};"
 %>
 <style>
@@ -20,7 +21,7 @@
 </style>
 <table width="100%" style="<%=style_str%>">
   <tr>
-    <% if c %>
+    <% if c%>
       <td width="10px">
         <% if c.logo? %>
           <%= image_tag c.logo.url(:icon) %>
@@ -151,7 +152,8 @@
                     <ul class="dropdown-menu">
                       <% c.surveys.each do |survey| %>
                           <li>
-                            <%= link_to survey.name, customer_survey_reports_path(c,survey,format: 'pdf'),target: "_blank", class: "navbar-link", style: style_str %>
+                            <!-- link_to survey.name, customer_survey_reports_path(c,survey,format: 'pdf'),target: "_blank", class: "navbar-link", style: style_str -->
+                            <%= link_to survey.name, customer_survey_reports_path(c,survey,format: 'html'), class: "navbar-link", style: style_str %>
                           </li>
                       <% end %>
                     </ul>

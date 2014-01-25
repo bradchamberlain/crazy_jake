@@ -4,7 +4,7 @@
       Display Name:
     </th>
     <td>
-      <%=@customer.name%>
+      <%= @editable ? (link_to @customer.name, edit_customer_path(@customer)) : @customer.name%>
     </td>
   </tr>
   <tr>
@@ -12,26 +12,33 @@
       Logo
     </th>
     <td>
-      <%=image_tag @customer.logo.url(:small)%>
+      <%= @editable ? (link_to image_tag(@customer.logo.url(:small)), edit_customer_path(@customer)) : (image_tag @customer.logo.url(:small))%>
     </td>
   </tr>
 </table>
 <table style="background-color: white;">
   <tr>
-    <th>Menu Text Color</th>
+    <th>
+      <%= @editable ? (link_to "Menu Text Color", edit_customer_path(@customer)) : "Menu Text Color" %>
+    </th>
     <td style="width:50px;background-color:<%=@customer.menu_text_color.present? ? @customer.menu_text_color : "#FFFFFF"%>;">&nbsp;</td>
   </tr>
   <tr>
-    <th>Menu Background Color</th>
+    <th>
+      <%= @editable ? (link_to "Menu Background Color", edit_customer_path(@customer)) : "Menu Background Color" %>
+    </th>
     <td style="width:10px;background-color:<%=@customer.menu_bg_color.present? ? @customer.menu_bg_color : "#000000"%>;">&nbsp;</td>
   </tr>
   <tr>
-    <th>Body Text Color</th>
+    <th>
+      <%= @editable ? (link_to "Body Text Color", edit_customer_path(@customer)) : "Body Text Color" %>
+    </th>
     <td style="width:10px;background-color:<%=@customer.body_text_color.present? ? @customer.body_text_color : "#000000"%>;">&nbsp;</td>
   </tr>
   <tr>
-    <th>Body Background Color</th>
+    <th>
+      <%= @editable ? (link_to "Body Background Color", edit_customer_path(@customer)) : "Body Background Color" %>
+    </th>
     <td style="width:10px;background-color:<%=@customer.body_bg_color.present? ? @customer.body_bg_color : "#FFFFFF"%>;">&nbsp;</td>
   </tr>
 </table>
-<%= link_to "Update Profile", edit_customer_path(@customer) if @editable %>

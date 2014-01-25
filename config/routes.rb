@@ -12,7 +12,11 @@ CrazyJake::Application.routes.draw do
         member do
           get "card"
         end
-      resources :reports, only: [:index]
+      resources :reports, only: [:index]  do
+        member do
+          get 'reporting_fields'
+        end
+      end
       resources :questions do
         member do
           get 'down'

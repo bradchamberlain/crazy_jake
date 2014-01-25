@@ -12,13 +12,13 @@
         data.addColumn('string', 'Answer');
         data.addColumn('number', 'Visit');
         data.addRows([
-            <% @responses[question.id].each do |k,v|%>
+            <% @report.responses[question.id].each do |k,v|%>
             ['<%=k.to_s.titleize%>',<%=v%>],
             <% end %>
         ]);
 
         // Set chart options
-        var options = {'title':'<%=question.text%> (Respondents: <%=(@answers[question.id]/@complete_surveys.size.to_f*100).round(1)%>%)',
+        var options = {'title':'<%=question.text%> (Respondents: <%=(@report.answers[question.id]/@report.complete_surveys.size.to_f*100).round(1)%>%)',
             'width':600,
             'height':200};
 

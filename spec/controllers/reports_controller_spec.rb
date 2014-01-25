@@ -24,16 +24,37 @@ describe ReportsController do
       cs = CompleteSurvey.new
       cs.survey = survey
       cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
+      cs.custom_values = {"c_Id" => "abc"}
       cs.save!
       get :index, {customer_id: survey.customer.id, survey_id: survey.id}, {}
       response.should be_success
     end
+  end
 
+  describe "GET pdf" do
     it "gets PDF" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      question3 = Question.create! valid_attributes3
       cs = CompleteSurvey.new
       cs.survey = survey
+      cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
+      cs.custom_values = {"c_Id" => "abc"}
       cs.save!
-      get :index, {customer_id: survey.customer.id, survey_id: survey.id, format: :pdf}, {}
+      get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
+      response.should be_success
+    end
+
+    it "gets PDF" do
+      question1 = Question.create! valid_attributes
+      question2 = Question.create! valid_attributes2
+      question3 = Question.create! valid_attributes3
+      cs = CompleteSurvey.new
+      cs.survey = survey
+      cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
+      cs.custom_values = {"c_Id" => "abc"}
+      cs.save!
+      get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 2,  format: :pdf, "c_Id" => "abc"}, {}
       response.should be_success
     end
 

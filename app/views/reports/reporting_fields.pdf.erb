@@ -5,14 +5,17 @@
 </script>
 <table width="100%">
   <tr>
-    <td><h1><%=@survey.name.titleize%></h1></td>
+    <td><h1><%=@report.title%></h1></td>
     <td style="text-align: right"><h4><small><%=Date.today.strftime("%B %-d, %Y")%></small></h4></td>
   </tr>
+  <% if @report.subtitle.present? %>
+      <tr><td><h3><%=@report.subtitle%></h3></td></tr>
+  <% end %>
 </table>
 
 <table class="table table-striped table-bordered table-hover" style="width:100%;">
   <tbody>
-  <% @survey.questions.order(:index).each do |question| %>
+  <% @report.survey.questions.order(:index).each do |question| %>
   <tr><td colspan="100%"><hr /></td></tr>
       <% if question.rating? or question.yes_no? %>
           <%= render 'chart', question: question %>
@@ -26,7 +29,7 @@
   <tr>
     <th colspan="100%">
       <div class="pull-right">
-        Total Responses: <%=@complete_surveys.size%>
+        Total Responses: <%=@report.complete_surveys.size%>
       </div>
     </th>
   </tr>
