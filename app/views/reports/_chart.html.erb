@@ -19,8 +19,10 @@
 
         // Set chart options
         var options = {'title':'<%=question.text%> (Respondents: <%=(@report.answers[question.id]/@report.complete_surveys.size.to_f*100).round(1)%>%)',
-            'width':600,
-            'height':200};
+            width: 600,
+            height: 200,
+            colors: <%= raw @report.response_colors(question.id) %>
+        };
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.<%=question.yes_no? ? 'BarChart' : 'PieChart'%>(document.getElementById('chart_div<%=question.id%>'));
