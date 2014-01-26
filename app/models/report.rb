@@ -11,6 +11,30 @@ class Report
     process_questions
   end
 
+  def response_colors question_id
+    colors = "["
+    responses[question_id].each do |k,v|
+      if k == :yes
+        colors = colors +  "'#0000FF',"
+      elsif k == :no
+        colors = colors + "'#FF00FF',"
+      elsif k == :extremely_satisfied
+        colors = colors + "'#00AA00',"
+      elsif k == :very_satisfied
+        colors = colors + "'#4444FF',"
+      elsif k == :satisfied
+        colors = colors + "'#F8F800',"
+      elsif k == :unsatisfied
+        colors = colors + "'#FFA500',"
+      elsif k == :very_unsatisfied
+        colors = colors + "'#FF0000',"
+      elsif k == :unknown
+        colors = colors + "'#888888',"
+      end
+    end
+    colors[0..colors.length - 2] + "]"
+  end
+
   private
 
   def process_questions
