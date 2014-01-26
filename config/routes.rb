@@ -14,7 +14,7 @@ CrazyJake::Application.routes.draw do
         end
       resources :reports, only: [:index]  do
         member do
-          get 'reporting_fields'
+          post 'reporting_fields'
         end
       end
       resources :questions do

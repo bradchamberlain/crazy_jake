@@ -54,7 +54,7 @@ describe ReportsController do
       cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
       cs.custom_values = {"c_Id" => "abc"}
       cs.save!
-      get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 2,  format: :pdf, "c_Id" => "abc"}, {}
+      get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 2,  "field" => { "c_Id" => "abc", "format" => "pdf"}}, {}
       response.should be_success
     end
 

@@ -1,40 +1,45 @@
 <style>
 
 </style>
+<%= form_tag(reporting_fields_customer_survey_report_path(@customer, @survey,2), method: :post) %>
 <table class="table">
   <thead>
   <tr>
     <th>
       Report Option
     </th>
-    <th colspan="100%">
-      Output Option
-    </th>
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td>
-      All Responses Report
-    </td>
-    <td>
-      <%= link_to "Web", reporting_fields_customer_survey_report_path(@customer, @survey, 1), target: "_blank" %>
-        |
-      <%= link_to "PDF", reporting_fields_customer_survey_report_path(@customer, @survey, 1, format: :pdf), target: "_blank" %>
-    </td>
-  </tr>
+  <% current_field = "" %>
   <% @reporting_fields.each do |reporting_field| %>
   <tr>
+    <% unless current_field == reporting_field[0] %>
+      <td rowspan="<%= @reporting_fields.select{ |k,v| k == reporting_field[0]}.size %>">
+        <%=reporting_field[0].match /[^c_].*/%>
+      </td>
+      <% current_field = reporting_field[0] %>
+    <% end %>
     <td>
-      <%= reporting_field[0].match /[^c_].*/ %> = <%=reporting_field[1] %>
-    </td>
-    <td>
-      <%= link_to "Web", reporting_fields_customer_survey_report_path(@customer, @survey, 2, reporting_field[0] => reporting_field[1]), target: "_blank" %>
-        |
-      <%= link_to "PDF", reporting_fields_customer_survey_report_path(@customer, @survey, 2, reporting_field[0] => reporting_field[1], format: :pdf), target: "_blank" %>
+      <input type="radio" name="field[<%=reporting_field[0]%>]" id="<%=reporting_field[0]%>" value="<%=reporting_field[1] %>">
+      <%=reporting_field[1] %>
     </td>
   </tr>
   <% end %>
   </tbody>
 </table>
-
+  <% if @reporting_fields and @reporting_fields.size > 1 %>
+    <table>
+      <tr>
+        <td><input type="radio" id="format" name="field[format]" value="html"></td>
+        <td>Web</td>
+      </tr>
+      <tr>
+        <td><input type="radio" id="format" name="field[format]" value="pdf"></td>
+        <td>PDF</td>
+      </tr>
+    </table>
+    <input type="submit" value="Generate Report" />
+    <input type="reset" value="Clear All Fields" />
+  <% end %>
+</form>

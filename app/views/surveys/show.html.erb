@@ -80,7 +80,7 @@
     <thead>
     <tr>
       <td colspan="100%">
-        <div style="font-weight: bold">View and Print Survey Cards</div>
+        <div style="font-weight: bold">View and Print Survey</div>
         <div style="font-size: small">Print surveys are first 3 questions only. Links open new window.</div>
       </td>
     </tr>
@@ -95,7 +95,7 @@
                rf.each do |f|
                  p = p.merge(f)
                end %>
-            <%= link_to p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\">]|(c_)/,""), card_customer_survey_path(@customer, @survey, p), target: "_blank" %>
+            <%= link_to "View printable card for #{p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\">]|(c_)/,"")}", card_customer_survey_path(@customer, @survey, p), target: "_blank" %>
           </td>
           <td>
             <% p.delete(:format) %>
