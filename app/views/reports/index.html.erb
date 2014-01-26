@@ -28,7 +28,6 @@
   <% end %>
   </tbody>
 </table>
-  <% if @reporting_fields and @reporting_fields.size > 1 %>
     <table>
       <tr>
         <td><input type="radio" id="format" name="field[format]" value="html"></td>
@@ -41,5 +40,4 @@
     </table>
     <input type="submit" value="Generate Report" />
     <input type="reset" value="Clear All Fields" />
-  <% end %>
 </form>
