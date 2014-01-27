@@ -45,6 +45,7 @@ gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 
 gem "paperclip", "~> 3.0"
+gem 'aws-sdk'
 
 group :development do
   gem 'rails_layout'
