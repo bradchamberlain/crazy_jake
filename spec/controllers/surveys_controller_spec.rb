@@ -167,6 +167,14 @@ describe SurveysController do
       put :card, {id: survey.to_param, customer_id: customer.id, format: "pdf"}, valid_session
       response.should render_template("card")
     end
+    it "shows blank card" do
+      c = FactoryGirl.create (:non_active_customer)
+      survey = Survey.create! valid_attributes
+      survey.customer = c
+      survey.save!
+      put :card, {id: survey.to_param, customer_id: c.id, format: "pdf"}, valid_session
+      response.should render_template("blank_card")
+    end
   end
 
   describe "DELETE destroy" do

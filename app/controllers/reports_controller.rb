@@ -1,6 +1,5 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
-  before_action :allow_reporting
 
   require 'open-uri'
 
@@ -31,6 +30,7 @@ class ReportsController < ApplicationController
     @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     @survey = Survey.find(params[:survey_id])
     raise unless @survey.customer == @customer
+    raise unless @customer.active?
     complete_surveys = CompleteSurvey.where(survey: @survey).where.not(responses: nil)
     sub_title = ""
     format = "html"
@@ -45,10 +45,5 @@ class ReportsController < ApplicationController
     @report.subtitle = sub_title[0..sub_title.length - 4] if sub_title.length > 0
     format
   end
-
-  def allow_reporting
-    redirect_to customers_path unless active?
-  end
-
 
 end

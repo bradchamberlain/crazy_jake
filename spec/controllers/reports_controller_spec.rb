@@ -16,6 +16,12 @@ describe ReportsController do
     sign_in user
   end
 
+  after :each do
+    Survey.destroy_all
+    Customer.destroy_all
+    Question.destroy_all
+  end
+
   describe "GET index" do
     it "assigns all questions as @questions" do
       question1 = Question.create! valid_attributes
@@ -45,6 +51,20 @@ describe ReportsController do
       response.should be_success
     end
 
+    it "doesn't get PDF" do
+      c = FactoryGirl.create(:non_active_customer)
+      survey.customer = c
+      survey.save!
+      question1 = Question.create! valid_attributes
+      cs = CompleteSurvey.new
+      cs.survey = survey
+      cs.responses = {question1.id => 1}
+      cs.save!
+      expect{
+        get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
+      }.to raise_exception
+    end
+
     it "gets PDF" do
       question1 = Question.create! valid_attributes
       question2 = Question.create! valid_attributes2
@@ -57,11 +77,5 @@ describe ReportsController do
       get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 2,  "field" => { "c_Id" => "abc", "format" => "pdf"}}, {}
       response.should be_success
     end
-
   end
-
-  after :each do
-    Survey.destroy_all
-  end
-
 end
