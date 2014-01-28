@@ -1,5 +1,6 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
+  before_action :allow_reporting
 
   require 'open-uri'
 
@@ -43,6 +44,10 @@ class ReportsController < ApplicationController
     @report = Report.new @survey, complete_surveys
     @report.subtitle = sub_title[0..sub_title.length - 4] if sub_title.length > 0
     format
+  end
+
+  def allow_reporting
+    redirect_to customers_path unless active?
   end
 
 

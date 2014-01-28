@@ -69,19 +69,21 @@ class SurveysController < ApplicationController
   end
 
   def card
-    rqrcode
-    @reporting_fields = params.select{|k,v| k.match /^c_/}
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render :pdf => "survey_cards"
+    if @customer.active?
+      rqrcode
+      @reporting_fields = params.select{|k,v| k.match /^c_/}
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render :pdf => "survey_cards"
+        end
       end
+    else
+      render :blank_card
     end
-
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
 
     def setup_reporting_fields
       first_array, *rest = build_values_array

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140124211820) do
+ActiveRecord::Schema.define(version: 20140127221157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20140124211820) do
     t.string   "menu_bg_color"
     t.string   "body_text_color"
     t.string   "body_bg_color"
+    t.date     "payment_received"
   end
 
   create_table "questions", force: true do |t|

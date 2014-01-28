@@ -126,8 +126,8 @@
                       <li>
                         <%= link_to "Reporting Fields", customer_survey_reporting_fields_path(c,survey), class: "navbar-link", style: style_str %>
                       </li>
-                      <% end %>
-                      <li class="divider"></li>
+                    <% end %>
+                    <li class="divider"></li>
                     <% end %>
                     <% if current_user.admin? or current_user.master_user? %>
                       <li>
@@ -140,6 +140,7 @@
             </div>
           </nav>
           </td>
+          <% if c.active? %>
           <td width="100px">
             <nav class="navbar-default" role="navigation">
               <div class="navbar-header">
@@ -162,6 +163,7 @@
               </div>
             </nav>
           </td>
+          <% end %>
         <% end %>
       <% end %>
     <td width="100px">&nbsp;</td>

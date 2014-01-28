@@ -17,6 +17,16 @@
   </tr>
 </table>
 <table style="background-color: white;">
+  <% if current_user.admin? %>
+  <tr>
+    <th>
+      <%= link_to "Active", edit_customer_path(@customer) %>
+    </th>
+    <td>
+      <%= @customer.active?%>
+    </td>
+  </tr>
+  <% end %>
   <tr>
     <th>
       <%= @editable ? (link_to "Menu Text Color", edit_customer_path(@customer)) : "Menu Text Color" %>
