@@ -75,6 +75,7 @@
   </tbody>
   </table>
 </div>
+<% if @customer.active? %>
 <div class="table-responsive">
   <table class="table table-bordered table-condensed">
     <thead>
@@ -87,9 +88,9 @@
     </thead>
     <tbody>
     <% if @reporting_fields %>
-    <% @reporting_fields.each do |rf| %>
-      <tr>
-        <td></td>
+      <% @reporting_fields.each do |rf| %>
+        <tr>
+          <td></td>
           <td>
             <% p = {format: 'pdf'}
                rf.each do |f|
@@ -101,8 +102,8 @@
             <% p.delete(:format) %>
             <%= link_to "View survey for #{p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\">]|(c_)/,"")}", complete_surveys_path( {survey_id: @survey.id}.merge(p)), target: "_blank" %>
           </td>
-      </tr>
-    <% end %>
+        </tr>
+      <% end %>
     <% end %>
     <tr>
       <td></td>
@@ -114,3 +115,26 @@
     </tbody>
   </table>
 </div>
+<% else %>
+ <div class="table-responsive">
+   <table class="table table-bordered table-condensed">
+     <thead>
+     <tr>
+       <th colspan="100%">Reporting Fields</th>
+     </tr>
+     <tr>
+       <th>Title</th>
+       <th>Values</th>
+     </tr>
+     </thead>
+     <tbody>
+     <% @survey.reporting_fields.each do |reporting_field| %>
+       <tr>
+         <td><%=reporting_field.field_title %></td>
+         <td><pre><%=reporting_field.field_values%></pre></td>
+       </tr>
+     <% end %>
+     </tbody>
+   </table>
+ </div>
+<% end %>

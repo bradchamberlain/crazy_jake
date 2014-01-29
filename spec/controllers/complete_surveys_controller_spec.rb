@@ -32,9 +32,23 @@ describe CompleteSurveysController do
   # CompleteSurveysController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
+  before :each do
+    Customer.destroy_all
+    Survey.destroy_all
+  end
+
+  after :each do
+    Customer.destroy_all
+    Survey.destroy_all
+  end
+
   describe "GET index" do
     it "assigns all complete_surveys as @complete_surveys" do
+      c = FactoryGirl.create(:customer)
+      survey.customer = c
+      survey.save!
       get :index, {"survey_id" => survey.id}, valid_session
+
       response.should be_success
     end
   end

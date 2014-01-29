@@ -5,6 +5,7 @@ class CompleteSurveysController < ApplicationController
   # GET /complete_surveys
   # GET /complete_surveys.json
   def index
+    redirect_to new_user_session_path unless @survey.customer.active?
   end
 
   # POST /complete_surveys
