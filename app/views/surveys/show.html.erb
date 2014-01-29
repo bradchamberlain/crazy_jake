@@ -75,7 +75,7 @@
   </tbody>
   </table>
 </div>
-<% if @customer.active? %>
+<% if @customer.active? or current_user.admin? %>
 <div class="table-responsive">
   <table class="table table-bordered table-condensed">
     <thead>

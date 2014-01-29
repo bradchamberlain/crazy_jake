@@ -52,7 +52,11 @@ describe ReportsController do
     end
 
     it "doesn't get PDF" do
+      ruser = FactoryGirl.build(:reg_user)
       c = FactoryGirl.create(:non_active_customer)
+      ruser.customer = c
+      ruser.save!
+      sign_in ruser
       survey.customer = c
       survey.save!
       question1 = Question.create! valid_attributes
@@ -63,6 +67,22 @@ describe ReportsController do
       expect{
         get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
       }.to raise_exception
+      ruser.destroy
+      survey.destroy
+      c.destroy
+    end
+
+    it "gets the PDF for admin" do
+      c = FactoryGirl.create(:non_active_customer)
+      survey.customer = c
+      survey.save!
+      question1 = Question.create! valid_attributes
+      cs = CompleteSurvey.new
+      cs.survey = survey
+      cs.responses = {question1.id => 1}
+      cs.save!
+      get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
+      response.should be_success
     end
 
     it "gets PDF" do

@@ -30,7 +30,7 @@ class ReportsController < ApplicationController
     @customer = current_user.admin? ? Customer.find(params[:customer_id]) : current_user.customer
     @survey = Survey.find(params[:survey_id])
     raise unless @survey.customer == @customer
-    raise unless @customer.active?
+    raise unless @customer.active? or current_user.admin?
     complete_surveys = CompleteSurvey.where(survey: @survey).where.not(responses: nil)
     sub_title = ""
     format = "html"
