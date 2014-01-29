@@ -167,13 +167,28 @@ describe SurveysController do
       put :card, {id: survey.to_param, customer_id: customer.id, format: "pdf"}, valid_session
       response.should render_template("card")
     end
-    it "shows blank card" do
+    it "shows card for admin" do
       c = FactoryGirl.create (:non_active_customer)
       survey = Survey.create! valid_attributes
       survey.customer = c
       survey.save!
       put :card, {id: survey.to_param, customer_id: c.id, format: "pdf"}, valid_session
+      response.should render_template("card")
+    end
+    it "shows blank card" do
+      reg_user = FactoryGirl.build(:reg_user)
+      c = FactoryGirl.create (:non_active_customer)
+      reg_user.customer = c
+      reg_user.save!
+      sign_in reg_user
+      survey = Survey.create! valid_attributes
+      survey.customer = c
+      survey.save!
+      put :card, {id: survey.to_param, customer_id: c.id, format: "pdf"}, valid_session
       response.should render_template("blank_card")
+      reg_user.destroy
+      c.destroy
+      survey.destroy
     end
   end
 

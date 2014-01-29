@@ -69,7 +69,7 @@ class SurveysController < ApplicationController
   end
 
   def card
-    if @customer.active?
+    if @customer.active? or current_user.admin?
       rqrcode
       @reporting_fields = params.select{|k,v| k.match /^c_/}
       respond_to do |format|

@@ -1,6 +1,7 @@
 CrazyJake::Application.routes.draw do
 
-  devise_for :users
+  #devise_for :users
+  devise_for :users, :controllers => {:registrations => "registrations"}
   resources :users, except: [:show]
 
   resources :complete_surveys, only: [:index, :create]
