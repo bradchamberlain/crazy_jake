@@ -6,6 +6,6 @@ class ReportingField < ActiveRecord::Base
   validates :survey_id, { presence: true }
 
   def field_values_array
-    field_values.strip.split(/[\r\n]+/)
+    field_values ? field_values.strip.split(/[\r\n]+/) : Array.new
   end
 end

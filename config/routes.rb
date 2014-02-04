@@ -11,7 +11,7 @@ CrazyJake::Application.routes.draw do
   resources :customers do
     resources :surveys do
         member do
-          get "card"
+          post "card"
         end
       resources :reports, only: [:index]  do
         member do
@@ -26,6 +26,7 @@ CrazyJake::Application.routes.draw do
       end
       resources :reporting_fields, except: [:show]
     end
+    resources :payments, only: [:index, :create]
   end
 
   root :to => "customers#index"

@@ -157,14 +157,14 @@ describe SurveysController do
   end
 
   describe "CARD" do
-    it "shows html card" do
+    it "redirects to the survey" do
       survey = Survey.create! valid_attributes
-      put :card, {id: survey.to_param, customer_id: customer.id}, valid_session
-      response.should render_template("card")
+      put :card, {id: survey.to_param, customer_id: customer.id, what: "Web Survey"}, valid_session
+      response.should redirect_to complete_surveys_path(survey_id: survey.id)
     end
     it "shows pdf card" do
       survey = Survey.create! valid_attributes
-      put :card, {id: survey.to_param, customer_id: customer.id, format: "pdf"}, valid_session
+      put :card, {id: survey.to_param, customer_id: customer.id, what: "Printable Card"}, valid_session
       response.should render_template("card")
     end
     it "shows card for admin" do
@@ -172,10 +172,15 @@ describe SurveysController do
       survey = Survey.create! valid_attributes
       survey.customer = c
       survey.save!
-      put :card, {id: survey.to_param, customer_id: c.id, format: "pdf"}, valid_session
+      put :card, {id: survey.to_param, customer_id: c.id, what: "Printable Card"}, valid_session
       response.should render_template("card")
     end
-    it "shows blank card" do
+    it "shows blank card when logged in but doesn't know what to do" do
+      survey = Survey.create! valid_attributes
+      put :card, {id: survey.to_param, customer_id: customer.id, what: "Nobody"}, valid_session
+      response.should render_template("blank_card")
+    end
+    it "shows blank card when logged in non-admin and customer is not active" do
       reg_user = FactoryGirl.build(:reg_user)
       c = FactoryGirl.create (:non_active_customer)
       reg_user.customer = c
@@ -184,7 +189,7 @@ describe SurveysController do
       survey = Survey.create! valid_attributes
       survey.customer = c
       survey.save!
-      put :card, {id: survey.to_param, customer_id: c.id, format: "pdf"}, valid_session
+      put :card, {id: survey.to_param, customer_id: c.id}, valid_session
       response.should render_template("blank_card")
       reg_user.destroy
       c.destroy

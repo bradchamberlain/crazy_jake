@@ -36,7 +36,7 @@ class ReportsController < ApplicationController
     format = "html"
     if params[:field]
       format = params[:field][:format]
-      params[:field].select{ |k| k.match /^c_/}.each do |k, v|
+      params[:field].select{ |k, v| k.match /^c_/ and v.present? }.each do |k, v|
         complete_surveys = complete_surveys.where( "custom_values @> hstore(:key, :value)", key: k, value: v)
         sub_title = sub_title  + (k.match /[^c_].*/).to_s + ": " + v + " | "
       end

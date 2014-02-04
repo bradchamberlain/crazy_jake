@@ -3,40 +3,39 @@
 </style>
 <%= form_tag(reporting_fields_customer_survey_report_path(@customer, @survey,2), method: :post) %>
 <table class="table">
-  <thead>
+  <tbody>
   <tr>
-    <th>
-      Report Option
+    <th colspan="100%">
+      Reporting Fields
     </th>
   </tr>
-  </thead>
-  <tbody>
-  <% current_field = "" %>
-  <% @reporting_fields.each do |reporting_field| %>
-  <tr>
-    <% unless current_field == reporting_field[0] %>
-      <td rowspan="<%= @reporting_fields.select{ |k,v| k == reporting_field[0]}.size %>">
-        <%=reporting_field[0].match /[^c_].*/%>
+  <% @reporting_fields.map{ |k, v| k }.uniq.each do |reporting_field| %>
+    <tr>
+      <td width="5%"></td>
+      <th width="10%">
+        <%=reporting_field.match /[^c_].*/%>
+      </th>
+      <td>
+        <%= select(:field, reporting_field,@reporting_fields.select{ |k,v| k == reporting_field}.map{|k,v| v }, { :include_blank => true } ) %>
       </td>
-      <% current_field = reporting_field[0] %>
-    <% end %>
-    <td>
-      <input type="radio" name="field[<%=reporting_field[0]%>]" id="<%=reporting_field[0]%>" value="<%=reporting_field[1] %>">
-      <%=reporting_field[1] %>
-    </td>
-  </tr>
+    </tr>
   <% end %>
+  <tr>
+    <th colspan="100%">
+      Report Options
+    </th>
+  </tr>
+  <tr>
+    <td></td>
+    <th>Date Range</th>
+    <td>From: <%= date_select(:field, "from") %> To: <%= date_select(:field, "to") %></td>
+  </tr>
+  <tr>
+    <td></td>
+    <th>Output Format:</th>
+    <td><%= select(:field, "format", {"Web" => "html","PDF" => "pdf" }) %></td>
+  </tr>
   </tbody>
-</table>
-    <table>
-      <tr>
-        <td><input type="radio" id="format" name="field[format]" value="html"></td>
-        <td>Web</td>
-      </tr>
-      <tr>
-        <td><input type="radio" id="format" name="field[format]" value="pdf"></td>
-        <td>PDF</td>
-      </tr>
     </table>
     <input type="submit" value="Generate Report" />
     <input type="reset" value="Clear All Fields" />

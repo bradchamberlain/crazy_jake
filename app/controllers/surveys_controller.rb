@@ -14,7 +14,7 @@ class SurveysController < ApplicationController
   # GET /surveys/1
   # GET /surveys/1.json
   def show
-    setup_reporting_fields
+    #setup_reporting_fields
     rqrcode
   end
 
@@ -70,13 +70,17 @@ class SurveysController < ApplicationController
 
   def card
     if @customer.active? or current_user.admin?
-      rqrcode
-      @reporting_fields = params.select{|k,v| k.match /^c_/}
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render :pdf => "survey_cards"
-        end
+      if params[:what] == "Web Survey"
+        p = { survey_id: @survey.id }
+        params[:field].try(:each){|k,v| p[("c_" + k).to_sym] = v}
+        redirect_to complete_surveys_path(p)
+      elsif params[:what] == "Printable Card"
+        rqrcode
+        @reporting_fields = Hash.new
+        params[:field].try(:each){|k,v| @reporting_fields[("c_" + k).to_sym] = v}
+        render :pdf => "survey_cards"
+      else
+        render :blank_card
       end
     else
       render :blank_card
@@ -85,20 +89,20 @@ class SurveysController < ApplicationController
 
   private
 
-    def setup_reporting_fields
-      first_array, *rest = build_values_array
-      @reporting_fields = first_array.product(*rest) if first_array
-    end
+    #def setup_reporting_fields
+    #  first_array, *rest = build_values_array
+    #  @reporting_fields = first_array.product(*rest) if first_array
+    #end
 
-    def build_values_array
-      array_holder = Array.new
-      @survey.reporting_fields.each do |reporting_field,reporting|
-        iteration_array = Array.new
-        reporting_field.field_values_array.each_with_index {|value,value_index| iteration_array[value_index] = {"c_" + reporting_field.field_title => value} }
-        array_holder << iteration_array
-      end
-      array_holder
-    end
+    #def build_values_array
+    #  array_holder = Array.new
+    #  @survey.reporting_fields.each do |reporting_field,reporting|
+    #    iteration_array = Array.new
+    #    reporting_field.field_values_array.each_with_index {|value,value_index| iteration_array[value_index] = {"c_" + reporting_field.field_title => value} }
+    #    array_holder << iteration_array
+    #  end
+    #  array_holder
+    #end
 
     def rqrcode
       @qr = RQRCode::QRCode.new(qr_survey_path,:size => 8)
@@ -111,9 +115,10 @@ class SurveysController < ApplicationController
     end
 
     def qr_survey_path
-      complete_surveys_url({survey_id: @survey.id}.merge(params.select{|k,v| k.match /^c_/}))
+      input_params = {survey_id: @survey.id}
+      params[:field].try(:each){|k,v| input_params[("c_" + k).to_sym] = v}
+      complete_surveys_url(input_params)
     end
-
 
   # Never trust parameters from the scary internet, only allow the white list through.
     def survey_params

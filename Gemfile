@@ -47,6 +47,8 @@ gem 'wicked_pdf'
 gem "paperclip", "~> 3.0"
 gem 'aws-sdk'
 
+gem 'stripe'
+
 group :development do
   gem 'rails_layout'
 end

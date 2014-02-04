@@ -13,7 +13,7 @@
     <tr>
       <td><%=reporting_field.field_title%></td>
       <td>
-        <%reporting_field.field_values.strip.split(/[\r\n]+/).each do |v| %>
+        <%reporting_field.field_values_array.each do |v| %>
           <%= v %><br />
         <% end %>
       </td>

@@ -101,6 +101,11 @@
                       <li>
                         <%= link_to "Add User", new_user_path, class: "navbar-link", style: style_str %>
                       </li>
+                      <% if !c.active? %>
+                      <li>
+                        <%= link_to "Make Payment", customer_payments_path(c), class: "navbar-link", style: style_str %>
+                      </li>
+                      <% end %>
                     <% end %>
                 </ul>
               </li>
