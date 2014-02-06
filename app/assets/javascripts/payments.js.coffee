@@ -1,7 +1,3 @@
-jQuery ->
-  Stripe.setPublishableKey($('meta[name="stripe-key"]').attr('content'))
-  payment.setupForm()
-
 payment =
   setupForm: ->
     $('#make_payment').submit ->
@@ -20,8 +16,11 @@ payment =
   handleStripeResponse: (status, response) ->
     if status == 200
       $('#stripe_card_token').val(response.id)
-      alert(response.id)
       $('#make_payment')[0].submit()
     else
       $('#stripe_error').text(response.error.message)
       $('input[type=submit]').attr('disabled', false)
+
+jQuery ->
+  Stripe.setPublishableKey($('meta[name="stripe-key"]').attr('content'))
+  payment.setupForm()

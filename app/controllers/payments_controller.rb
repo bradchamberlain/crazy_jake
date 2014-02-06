@@ -8,9 +8,33 @@ class PaymentsController < ApplicationController
 
   # POST /payments.json
   def create
-    @customer.payment_received = Date.today if params[:stripe_card_token].present?
+    # Amount in cents
+    @amount = 500
+
+    c = Stripe::Customer.create(
+      email: current_user.email,
+      description: (@customer.name + " made by " + current_user.email),
+      card: params[:stripe_card_token]
+    )
+
+    charge = Stripe::Charge.create(
+        :customer    => c.id,
+        :amount      => @amount,
+        :description => "#{@customer.name} Survey and Reporting",
+        :currency    => 'usd'
+    )
+
+    @customer.payment_received = Date.today
+    @customer.payment_token = c[:cards][:data][0][:fingerprint]
     @customer.save
-    redirect_to customer_path(@customer.id)
+    redirect_to paid_customer_payment_path(@customer, 1)
+  rescue Stripe::CardError => e
+    flash[:error] = e.message
+    redirect_to customer_payments_path
+  end
+
+  def paid
+
   end
 
   private
