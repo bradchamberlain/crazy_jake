@@ -77,43 +77,31 @@
 </div>
 <% if @customer.active? or current_user.admin? %>
 <div class="table-responsive">
-  <table class="table table-bordered table-condensed">
-    <thead>
-    <tr>
-      <td colspan="100%">
-        <div style="font-weight: bold">View and Print Survey</div>
-        <div style="font-size: small">Print surveys are first 3 questions only. Links open new window.</div>
-      </td>
-    </tr>
-    </thead>
+  <form action="<%= card_customer_survey_path%>" method="post">
+  <%= form_tag(card_customer_survey_path(@customer, @survey), method: :post) %>
+  <table class="table">
     <tbody>
-    <% if @reporting_fields %>
-      <% @reporting_fields.each do |rf| %>
+      <% current_value = "" %>
+      <% @survey.reporting_fields.each do |reporting_field| %>
         <tr>
-          <td></td>
+          <th width="10%">
+            <%= reporting_field.field_title %>
+          </th>
           <td>
-            <% p = {format: 'pdf'}
-               rf.each do |f|
-                 p = p.merge(f)
-               end %>
-            <%= link_to "View printable card for #{p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\">]|(c_)/,"")}", card_customer_survey_path(@customer, @survey, p), target: "_blank" %>
-          </td>
-          <td>
-            <% p.delete(:format) %>
-            <%= link_to "View survey for #{p.select{|k| k.match /^c_/}.to_s.gsub(/[{}\">]|(c_)/,"")}", complete_surveys_path( {survey_id: @survey.id}.merge(p)), target: "_blank" %>
+            <%= select(:field, reporting_field.field_title,reporting_field.field_values_array, { :include_blank => true } ) %>
           </td>
         </tr>
       <% end %>
-    <% end %>
-    <tr>
-      <td></td>
-      <td>
-        <%= link_to "No Reporting Fields", card_customer_survey_path(@customer, @survey, format: 'pdf'), target: "_blank" %>
-      </td>
-      <td><%= link_to "View Web Survey", complete_surveys_path(survey_id: @survey.id), target: "_blank"%></td>
-    </tr>
+      <tr>
+        <td colspan="100%">
+          <%= submit_tag "Printable Card", name: "what" %>
+          <%= submit_tag "Web Survey", name: "what" %>
+          <input type="reset" value="Clear All Fields" />
+        </td>
+      </tr>
     </tbody>
   </table>
+  </form>
 </div>
 <% else %>
  <div class="table-responsive">
