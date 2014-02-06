@@ -25,6 +25,8 @@ describe PaymentsController do
 
   before :each do
     Customer.destroy_all
+    user = FactoryGirl.create(:user)
+    sign_in user
   end
 
   describe "GET index" do
@@ -37,8 +39,20 @@ describe PaymentsController do
   describe "POST create" do
     describe "with valid params" do
       it "redirects to the successful payment" do
+        stub_request(:post, "https://api.stripe.com/v1/customers").
+            to_return(:status => 200, :body => "{\"id\":\"cus_3Rcaiydvlgakj1\",\"object\":\"customer\",\"created\":1391659274,\"livemode\":false,\"description\":\"City Pool made by c.dee@farmington.gov\",\"email\":\"c.dee@farmington.gov\",\"delinquent\":false,\"metadata\":{},\"subscriptions\":{\"object\":\"list\",\"count\":0,\"url\":\"/v1/customers/cus_3Rcaiydvlgakj1/subscriptions\",\"data\":[]},\"discount\":null,\"account_balance\":0,\"currency\":null,\"cards\":{\"object\":\"list\",\"count\":1,\"url\":\"/v1/customers/cus_3Rcaiydvlgakj1/cards\",\"data\":[{\"id\":\"card_103Rca28ikrXONtYx4Vq0LKn\",\"object\":\"card\",\"last4\":\"4242\",\"type\":\"Visa\",\"exp_month\":2,\"exp_year\":2014,\"fingerprint\":\"wUHfMtgLhmWmz7rv\",\"customer\":\"cus_3Rcaiydvlgakj1\",\"country\":\"US\",\"name\":null,\"address_line1\":null,\"address_line2\":null,\"address_city\":null,\"address_state\":null,\"address_zip\":null,\"address_country\":null,\"cvc_check\":\"pass\",\"address_line1_check\":null,\"address_zip_check\":null}]},\"default_card\":\"card_103Rca28ikrXONtYx4Vq0LKn\"}", :headers => {})
+        stub_request(:post, "https://api.stripe.com/v1/charges").
+            to_return(:status => 200, :body => " {\"id\":\"ch_103Rca28ikrXONtYZ47XW2P4\",\"object\":\"charge\",\"created\":1391659275,\"livemode\":false,\"paid\":true,\"amount\":500,\"currency\":\"usd\",\"refunded\":false,\"card\":{\"id\":\"card_103Rca28ikrXONtYx4Vq0LKn\",\"object\":\"card\",\"last4\":\"4242\",\"type\":\"Visa\",\"exp_month\":2,\"exp_year\":2014,\"fingerprint\":\"wUHfMtgLhmWmz7rv\",\"customer\":\"cus_3Rcaiydvlgakj1\",\"country\":\"US\",\"name\":null,\"address_line1\":null,\"address_line2\":null,\"address_city\":null,\"address_state\":null,\"address_zip\":null,\"address_country\":null,\"cvc_check\":\"pass\",\"address_line1_check\":null,\"address_zip_check\":null},\"captured\":true,\"refunds\":[],\"balance_transaction\":\"txn_103Rca28ikrXONtYQaLOv5jM\",\"failure_message\":null,\"failure_code\":null,\"amount_refunded\":0,\"customer\":\"cus_3Rcaiydvlgakj1\",\"invoice\":null,\"description\":\"Customer Survey and Reporting\",\"dispute\":null,\"metadata\":{}}", :headers => {})
         post :create, {customer_id: customer.to_param}, valid_session
-        response.should redirect_to(customer_path(customer))
+        response.should redirect_to(paid_customer_payment_path(customer,1))
+      end
+    end
+    describe "with invalid cc info" do
+      it "should raise an error" do
+        stub_request(:post, "https://api.stripe.com/v1/customers").
+            to_raise(Stripe::CardError.new("This doesn't work", {},200))
+        post :create, {customer_id: customer.to_param}, valid_session
+        response.should_not be_success
       end
     end
   end

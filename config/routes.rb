@@ -26,7 +26,11 @@ CrazyJake::Application.routes.draw do
       end
       resources :reporting_fields, except: [:show]
     end
-    resources :payments, only: [:index, :create]
+    resources :payments, only: [:index, :create]  do
+      member do
+        get 'paid'
+      end
+    end
   end
 
   root :to => "customers#index"
