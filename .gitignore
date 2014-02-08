@@ -5,7 +5,6 @@
 /public/system
 /public/companies
 /public/upload
-/config/initializers/stripe.rb
 
 doc/html
 
