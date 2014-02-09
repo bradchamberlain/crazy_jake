@@ -5,4 +5,5 @@ describe Survey do
   it { should validate_presence_of :name }
   it { should validate_presence_of :customer_id }
   it { should belong_to :customer}
+  it { should belong_to :tracking_type}
 end

@@ -31,6 +31,7 @@ describe ReportsController do
       cs.survey = survey
       cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
       cs.custom_values = {"c_Id" => "abc"}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       get :index, {customer_id: survey.customer.id, survey_id: survey.id}, {}
       response.should be_success
@@ -46,6 +47,7 @@ describe ReportsController do
       cs.survey = survey
       cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
       cs.custom_values = {"c_Id" => "abc"}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
       response.should be_success
@@ -63,6 +65,7 @@ describe ReportsController do
       cs = CompleteSurvey.new
       cs.survey = survey
       cs.responses = {question1.id => 1}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       expect{
         get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
@@ -80,6 +83,7 @@ describe ReportsController do
       cs = CompleteSurvey.new
       cs.survey = survey
       cs.responses = {question1.id => 1}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 1,  format: :pdf}, {}
       response.should be_success
@@ -93,6 +97,7 @@ describe ReportsController do
       cs.survey = survey
       cs.responses = {question1.id => 1, question2.id => 1, question3.id => "Hi Text"}
       cs.custom_values = {"c_Id" => "abc"}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       get :reporting_fields, {customer_id: survey.customer.id, survey_id: survey.id, id: 2,  "field" => { "c_Id" => "abc", "format" => "pdf"}}, {}
       response.should be_success

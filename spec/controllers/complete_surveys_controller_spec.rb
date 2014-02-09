@@ -25,7 +25,7 @@ describe CompleteSurveysController do
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
   let(:question) { FactoryGirl.build(:question) }
-  let(:valid_attributes) { { "survey_id" => survey.id } }
+  let(:valid_attributes) { { "survey_id" => survey.id, "ip_address" => "123.456.789.101" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -48,8 +48,27 @@ describe CompleteSurveysController do
       survey.customer = c
       survey.save!
       get :index, {"survey_id" => survey.id}, valid_session
-
       response.should be_success
+    end
+
+    it "does not create a new CompleteSurvey" do
+      complete_survey = CompleteSurvey.new
+      complete_survey.survey = survey
+      complete_survey.ip_address = "0.0.0.0"
+      complete_survey.save!
+      t = TrackingType.new
+      t.description = "Desc"
+      t.days = 1
+      survey.tracking_type = t
+      c = FactoryGirl.create(:customer)
+      survey.customer = c
+      survey.save!
+      get :index, {"survey_id" => survey.id}, valid_session
+      response.should render_template "cannot_complete"
+      complete_survey.destroy
+      t.destroy
+      c.destroy
+      survey.destroy!
     end
   end
 
@@ -86,6 +105,7 @@ describe CompleteSurveysController do
         question2.save!
         complete_survey = CompleteSurvey.new
         complete_survey.survey = survey
+        complete_survey.ip_address = "123.456.789.101"
         complete_survey.save!
         expect {
           post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id}, valid_session
@@ -106,6 +126,7 @@ describe CompleteSurveysController do
         complete_survey = CompleteSurvey.new
         complete_survey.survey = survey
         complete_survey.responses = ''
+        complete_survey.ip_address = "123.456.789.101"
         complete_survey.save!
         post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id, "_response" => "s"}, valid_session
         cs = CompleteSurvey.find(complete_survey.id)

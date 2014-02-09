@@ -1,5 +1,6 @@
 class Survey < ActiveRecord::Base
   belongs_to :customer
+  belongs_to :tracking_type
   has_many :questions, dependent: :destroy
   has_many :reporting_fields, dependent: :destroy
   has_many :complete_surveys, dependent: :destroy

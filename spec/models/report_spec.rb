@@ -20,6 +20,7 @@ describe Report do
       cs = CompleteSurvey.new
       cs.survey = survey
       cs.responses = {question.id => 1, question2.id => 2}
+      cs.ip_address = "123.456.789.101"
       cs.save!
       r = Report.new survey, [cs]
       r.response_colors(question.id).should eq "['#0000FF','#FF00FF']"
