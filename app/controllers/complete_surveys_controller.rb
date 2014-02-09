@@ -6,6 +6,7 @@ class CompleteSurveysController < ApplicationController
   # GET /complete_surveys.json
   def index
     redirect_to new_user_session_path unless (@survey.customer.active? or (current_user and current_user.admin?))
+    render 'cannot_complete' unless @complete_survey
   end
 
   # POST /complete_surveys
@@ -40,11 +41,21 @@ class CompleteSurveysController < ApplicationController
     def current_complete_survey
       if params[:complete_survey_id]
         @complete_survey = CompleteSurvey.find(params[:complete_survey_id])
-      else
+      elsif can_complete_survey
         @complete_survey = CompleteSurvey.new
         @complete_survey.survey = @survey
         @complete_survey.custom_values = params.select{|k| k.match /^c_/} if params.select{|k| k.match /^c_/}.present?
+        @complete_survey.ip_address = request.remote_ip
         @complete_survey.save!
+      end
+    end
+
+    def can_complete_survey
+      cs = CompleteSurvey.where(ip_address: request.remote_ip).order("created_at").last
+      if cs and @survey.tracking_type
+        cs.created_at < Date.today - @survey.tracking_type.days.days
+      else
+        true
       end
     end
 

@@ -122,7 +122,7 @@ class SurveysController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
     def survey_params
-      params.require(:survey).permit(:name, :customer_id, :complete_message)
+      params.require(:survey).permit(:name, :customer_id, :complete_message, :tracking_type_id)
     end
 
     def set_customer

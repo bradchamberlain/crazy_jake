@@ -75,6 +75,20 @@
   </tbody>
   </table>
 </div>
+<div class="table-responsive">
+  <table class="table table-bordered table-condensed">
+    <tbody>
+    <tr>
+      <th width="10%">User Restrictions</th>
+        <% if @survey.tracking_type %>
+          <td><%= @editable ? (link_to @survey.tracking_type.description, edit_customer_survey_path(@customer, @survey)) : @survey.tracking_type.description %></td>
+        <% else %>
+          <td><%= @editable ? (link_to "No Restrictions", edit_customer_survey_path(@customer, @survey)) : "No Restrictions" %></td>
+      <% end %>
+    </tr>
+    </tbody>
+  </table>
+</div>
 <% if @customer.active? or current_user.admin? %>
 <div class="table-responsive">
   <form action="<%= card_customer_survey_path%>" method="post">

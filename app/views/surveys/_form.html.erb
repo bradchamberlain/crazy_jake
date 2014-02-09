@@ -19,6 +19,10 @@
     <%= f.label :complete_message %><br />
     <%= f.text_area :complete_message %>
   </div>
+  <div class="field">
+    <%= f.label :tracking_type_id, "How often can a single user complete this survey?" %><br />
+    <%= f.collection_select :tracking_type_id, TrackingType.all, :id, :description, {include_blank: 'No limits'} %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

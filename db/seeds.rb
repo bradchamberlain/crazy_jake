@@ -5,3 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+TrackingType.find_or_create_by(description: "Once Daily", days:1)
+TrackingType.find_or_create_by(description: "Once Weekly", days:7)
+TrackingType.find_or_create_by(description: "Once Monthly", days:30)
+TrackingType.find_or_create_by(description: "Once Annually", days: 365)
+TrackingType.find_or_create_by(description: "One Time", days:30000)
