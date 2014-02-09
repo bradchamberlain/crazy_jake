@@ -9,7 +9,7 @@ class PaymentsController < ApplicationController
   # POST /payments.json
   def create
     # Amount in cents
-    @amount = 500
+    @amount = @customer.monthly_cost * 100
 
     c = Stripe::Customer.create(
       email: current_user.email,

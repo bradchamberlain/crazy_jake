@@ -1,5 +1,6 @@
 class Customer < ActiveRecord::Base
   validates :name, {uniqueness: true, presence: true}
+  validates :monthly_cost, {presence: true, numericality: { greater_than: 3 }  }
   has_many :surveys, dependent: :destroy
   has_many :users, dependent: :destroy
 

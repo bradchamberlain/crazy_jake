@@ -16,10 +16,14 @@
     <%= f.text_field :name %>
   </div>
   <% if current_user.admin? %>
-  <div class="field">
-    <%= f.label :payment_received %><br />
-    <%= f.date_select :payment_received, {:include_blank => true, :default => nil} %>
-  </div>
+      <div class="field">
+        <%= f.label :monthly_cost %> <br />
+        <%= f.text_field :monthly_cost %>
+      </div>
+      <div class="field">
+        <%= f.label :payment_received %><br />
+        <%= f.date_select :payment_received, {:include_blank => true, :default => nil} %>
+      </div>
   <% end %>
   <div class="field">
     <% if @customer.logo.file? %>
