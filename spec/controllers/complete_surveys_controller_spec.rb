@@ -25,6 +25,7 @@ describe CompleteSurveysController do
   # adjust the attributes here as well.
   let(:survey) { FactoryGirl.create(:survey) }
   let(:question) { FactoryGirl.build(:question) }
+  let(:custom_question) { FactoryGirl.build(:custom_question)}
   let(:valid_attributes) { { "survey_id" => survey.id, "ip_address" => "123.456.789.101" } }
 
   # This should return the minimal set of values that should be in the session
@@ -133,6 +134,23 @@ describe CompleteSurveysController do
         cs.responses["#{question.id}"].should eq "s"
         question.destroy
         question2.destroy
+        cs.destroy
+      end
+
+
+      it "updates the responses for CompleteSurvey with a multi response" do
+        question = FactoryGirl.build(:custom_question)
+        question.survey = survey
+        question.save!
+        complete_survey = CompleteSurvey.new
+        complete_survey.survey = survey
+        complete_survey.responses = ''
+        complete_survey.ip_address = "123.456.789.101"
+        complete_survey.save!
+        post :create, {:complete_survey => valid_attributes, "survey_id" => survey.id, "question_id" => question.id, "complete_survey_id" => complete_survey.id, "_response1" => "s"}, valid_session
+        cs = CompleteSurvey.find(complete_survey.id)
+        cs.responses["#{question.id}"].should eq "[\"s\"]"
+        question.destroy
         cs.destroy
       end
     end

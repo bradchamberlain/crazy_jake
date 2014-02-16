@@ -16,7 +16,7 @@
 <table class="table table-striped table-bordered table-hover" style="width:600px;">
   <tbody>
   <% @report.survey.questions.order(:index).each do |question| %>
-      <% if question.rating? or question.yes_no? %>
+      <% if question.rating? or question.yes_no? or question.customized? %>
           <%= render 'chart', question: question %>
       <% else %>
           <%= render 'responses', question: question %>

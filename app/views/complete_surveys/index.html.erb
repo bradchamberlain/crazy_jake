@@ -1,17 +1,16 @@
-<form method="post" id="question_form" name="question_form">
+<%= form_tag "" , method: :post, name: "question_form", id: "question_form" do %>
   <%= @question.text %>
   <br />
   <div id="question">
   <% if @question.yes_no? %>
-      <div class="field">
-          <input type="radio" id="_response1" name="_response" value="1" />
-          <label for="_response1">Yes</label>
-      </div>
-      <div class="field">
-        <input type="radio" id="_response2" name="_response" value="0">
-        <label for="_response2">No</label>
-      </div>
-
+    <div class="field">
+      <%= radio_button_tag "_response", 1 %>
+      <%= label_tag "_response_1", "Yes" %>
+    </div>
+    <div class="field">
+      <%= radio_button_tag "_response", 0 %>
+      <%= label_tag "_response_0", "No" %>
+    </div>
   <% elsif @question.rating? %>
     <div id="ratings">
       <div class="field">
@@ -41,6 +40,24 @@
     </div>
   <% elsif @question.free_form? %>
     <textarea id="_response" name="_response"></textarea>
+  <% elsif @question.customized? %>
+    <div class="field">
+      <% if @question.custom_type == 0 %>
+        <% @question.custom_values_array.each do |val| %>
+          <%= radio_button_tag "_response", val %>
+          <%= label_tag "_response_#{val}", val %><br />
+        <% end %>
+      <% elsif @question.custom_type == 1 %>
+        <% @question.custom_values_array.each_with_index do |val, i| %>
+          <%= check_box_tag "_response#{i}", val %>
+          <%= label_tag "_response#{i}", val %><br />
+        <% end %>
+      <% elsif @question.custom_type == 2 %>
+        <%= select_tag "_response", options_for_select(@question.custom_values_array) %>
+      <% elsif @question.custom_type == 3 %>
+        <%= select_tag "_response0", options_for_select(@question.custom_values_array),{multiple: :true, size: 5} %>
+      <% end %>
+    </div>
   <% end %>
   </div>
   <%= tag(:input, type: "hidden", name: "question_id", value: @question.id ) %>
@@ -49,4 +66,4 @@
   <%= tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
   <br />
   <input type="submit" value="Next ->" />
-</form>
+<% end %>

@@ -61,10 +61,15 @@ class CompleteSurveysController < ApplicationController
 
     def save_responses
       if params[:_response]
-        response = params[:_response].strip
-        response = response.to_i if response.match /\d/
+        answer = params[:_response].strip
+        answer = answer.to_i if answer.match /\d/
         @complete_survey.responses = Hash.new if @complete_survey.responses.nil?
-        @complete_survey.responses = { params[:question_id] =>  response }.merge(@complete_survey.responses)
+        @complete_survey.responses = { params[:question_id] =>  answer }.merge(@complete_survey.responses)
+        @complete_survey.save!
+      elsif params.select { |key,value| key.to_s.match(/^_response\d+/) }.any?
+        answer = params.select { |key,value| key.to_s.match(/^_response\d+/) }.values
+        @complete_survey.responses = Hash.new if @complete_survey.responses.nil?
+        @complete_survey.responses = { params[:question_id] =>  answer.to_s }.merge(@complete_survey.responses)
         @complete_survey.save!
       end
     end

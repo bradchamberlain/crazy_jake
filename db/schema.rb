@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140209044008) do
+ActiveRecord::Schema.define(version: 20140209202036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,9 @@ ActiveRecord::Schema.define(version: 20140209044008) do
     t.boolean  "free_form"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "customized"
+    t.text     "custom_values"
+    t.integer  "custom_type"
   end
 
   add_index "questions", ["survey_id"], name: "index_questions_on_survey_id", using: :btree
