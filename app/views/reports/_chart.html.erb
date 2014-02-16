@@ -12,17 +12,25 @@
         data.addColumn('string', 'Answer');
         data.addColumn('number', 'Visit');
         data.addRows([
-            <% @report.responses[question.id].each do |k,v|%>
+            <% highest = @report.question_highest_hits question.id
+              max_value = ""
+             @report.responses[question.id].each_with_index do |(k,v),i|%>
             ['<%=k.to_s.titleize%>',<%=v%>],
-            <% end %>
+            <%
+              if k == highest
+                max_value = i
+              end
+            end %>
         ]);
-
+        // <%= max_value %>
         // Set chart options
         var options = {'title':'<%=question.text%> (Respondents: <%=(@report.answers[question.id]/@report.complete_surveys.size.to_f*100).round(1)%>%)',
             width: 600,
             height: 200,
-            colors: <%= raw @report.response_colors(question.id) %>
+            colors: <%= raw @report.response_colors(question.id) %>,
+            slices: {  <%=max_value%>: {offset: 0.25} }
         };
+
 
         // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.<%=question.yes_no? ? 'BarChart' : 'PieChart'%>(document.getElementById('chart_div<%=question.id%>'));

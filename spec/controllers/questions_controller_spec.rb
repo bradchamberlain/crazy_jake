@@ -84,7 +84,7 @@ describe QuestionsController do
     describe "with valid params" do
       it "creates a new Question" do
         expect {
-          post :create, {customer_id: survey.customer.id, survey_id: survey.id, :question => valid_attributes}, valid_session
+          post :create, {customer_id: survey.customer.id, survey_id: survey.id, :question => valid_attributes.merge(:button_type => [1])}, valid_session
         }.to change(Question, :count).by(1)
       end
 

@@ -32,7 +32,19 @@ class Report
         colors = colors + "'#888888',"
       end
     end
-    colors[0..colors.length - 2] + "]"
+    if colors.length == 1
+      colors = "['#836fff','#0000ff','#00bfff','#00ffff','#c1ffc1'," +
+                "'#00ff7f','#fff68f','#ffff00','#ffb90f','#ff6a6a','#ff7f24'," +
+                "'#ff4040','#ff7f00','#ff4500','#cd0000','#ee1289','#ff3e96'," +
+                "'#8b4789','#9b30ff','#ffe1ff']"
+    else
+      colors = colors[0..colors.length - 2] + "]"
+    end
+    colors
+  end
+
+  def question_highest_hits question_id
+    responses[question_id].max_by{|k,v| v}[0]
   end
 
   private
@@ -47,6 +59,8 @@ class Report
         process_rating question.id
       elsif question.free_form?
         process_free_form question.id
+      elsif question.customized?
+        process_custom question
       end
     end
   end
@@ -63,13 +77,39 @@ class Report
   def process_rating question_id
     setup_responses question_id, [:extremely_satisfied, :very_satisfied, :satisfied, :unsatisfied, :very_unsatisfied, :unknown]
     complete_surveys.each do |c|
-      responses[question_id][:extremely_satisfied] = @responses[question_id][:extremely_satisfied] + 1 if c.responses[question_id.to_s] == "5"
-      responses[question_id][:very_satisfied] = @responses[question_id][:very_satisfied] + 1 if c.responses[question_id.to_s] == "4"
-      responses[question_id][:satisfied] = @responses[question_id][:satisfied] + 1 if c.responses[question_id.to_s] == "3"
-      responses[question_id][:unsatisfied] = @responses[question_id][:unsatisfied] + 1 if c.responses[question_id.to_s] == "2"
-      responses[question_id][:very_unsatisfied] = @responses[question_id][:very_unsatisfied] + 1 if c.responses[question_id.to_s] == "1"
-      responses[question_id][:unknown] = @responses[question_id][:unknown] + 1 if c.responses[question_id.to_s] == "0"
+      responses[question_id][:extremely_satisfied] = responses[question_id][:extremely_satisfied] + 1 if c.responses[question_id.to_s] == "5"
+      responses[question_id][:very_satisfied] = responses[question_id][:very_satisfied] + 1 if c.responses[question_id.to_s] == "4"
+      responses[question_id][:satisfied] = responses[question_id][:satisfied] + 1 if c.responses[question_id.to_s] == "3"
+      responses[question_id][:unsatisfied] = responses[question_id][:unsatisfied] + 1 if c.responses[question_id.to_s] == "2"
+      responses[question_id][:very_unsatisfied] = responses[question_id][:very_unsatisfied] + 1 if c.responses[question_id.to_s] == "1"
+      responses[question_id][:unknown] = responses[question_id][:unknown] + 1 if c.responses[question_id.to_s] == "0"
       answers[question_id] = answers[question_id] + 1 if c.responses[question_id.to_s]
+    end
+  end
+
+  def process_custom question
+    setup_responses question.id, question.custom_values_array
+    complete_surveys.each do |complete_survey|
+      if complete_survey.responses[question.id.to_s]
+        answers[question.id] = answers[question.id] + 1
+        match_custom_responses question, complete_survey
+      end
+    end
+  end
+
+  def match_custom_responses question, complete_survey
+    question.custom_values_array.each do |custom_question_value|
+      if complete_survey.responses[question.id.to_s].match /\[/
+        handle_custom_response_array(complete_survey, question, custom_question_value)
+      else
+        responses[question.id][custom_question_value] = responses[question.id][custom_question_value] + 1 if custom_question_value == complete_survey.responses[question.id.to_s]
+      end
+    end
+  end
+
+  def handle_custom_response_array(complete_survey, question, match_value)
+    complete_survey.responses[question.id.to_s][1..-2].split(",").each do |response_value|
+      responses[question.id][match_value] = responses[question.id][match_value] + 1 if complete_survey.responses[question.id.to_s][match_value] == response_value.strip[1..-2]
     end
   end
 
@@ -83,5 +123,6 @@ class Report
       answers[question_id] = answers[question_id] + 1 if c.responses[question_id.to_s].present?
     end
   end
+
 
 end

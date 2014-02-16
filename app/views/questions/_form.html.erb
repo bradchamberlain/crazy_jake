@@ -12,21 +12,37 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :text %><br>
+    <%= f.label :text, "This is the text displayed to your customers.  Include here punctuation as you wish it to appear." %><br />
     <%= f.text_area :text %>
   </div>
+
   <div class="field">
-    <%= f.label :yes_no %><br>
-    <%= f.check_box :yes_no %>
+    <%= f.label "Question Type:" %>
+    <br />
+    &nbsp;<%= f.radio_button :yes_no, :yes_no, { name: "question[button_type]", class: "qtype", checked: @question.yes_no?} %>
+    Yes/No<br />
+    &nbsp;<%= f.radio_button :rating, :rating, { name: "question[button_type]", class: "qtype", checked: @question.rating?} %>
+    Rating<br />
+    &nbsp;<%= f.radio_button :free_form, :free_form, { name: "question[button_type]", class: "qtype", checked: @question.free_form?} %>
+    Free Form<br />
+    &nbsp;<%= f.radio_button :customized, :customized, { name: "question[button_type]", class: "qtype", checked: @question.customized?} %>
+    Customized<br />
   </div>
-  <div class="field">
-    <%= f.label :rating %><br>
-    <%= f.check_box :rating %>
+  <div class="customized_question">
+    <div class="field">
+      <%= f.label :custom_values %><br />
+      <%= f.text_area :custom_values %>
+    </div>
+    <div class="field">
+      <%= f.label :custom_type %><br />
+      <%= f.select :custom_type, options_for_select(Question.custom_types.map.each_with_index { |v,i|[v.titleize,i]}, @question.custom_type) %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :free_form %><br>
-    <%= f.check_box :free_form %>
-  </div>
+  <% if @question.customized? %>
+    <script>
+        $(".customized_question").show()
+    </script>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

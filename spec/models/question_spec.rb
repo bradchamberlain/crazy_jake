@@ -36,5 +36,18 @@ describe Question do
         question.valid?.should be_false
         question.errors[:yes_no][0].should eq "Only one question type may be selected per question"
       end
+
+      it "should not allow the save for custom without type or custom values" do
+        question = Question.create! valid_attributes
+        question.yes_no = false
+        question.customized = true
+        question.valid?.should be_false
+        question.errors[:customized][0].should eq "You must provide the available values and display type when selecting custom question"
+      end
+
+      it "should have custom types" do
+        Question.custom_types.class.should eq Array
+      end
+
     end
 end
